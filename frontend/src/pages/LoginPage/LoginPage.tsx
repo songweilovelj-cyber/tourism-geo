@@ -1,0 +1,191 @@
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { api } from '@/api/client'
+
+function LoginPage() {
+  const navigate = useNavigate()
+  const [phone, setPhone] = useState('')
+  const [code, setCode] = useState('')
+  const [codeSent, setCodeSent] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  const handleSendCode = async () => {
+    if (!/^1[3-9]\d{9}$/.test(phone)) {
+      setError('请输入正确的手机号')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+
+    try {
+      await api.post('/auth/send-code', {
+        phone,
+        purpose: 'LOGIN'
+      })
+      setCodeSent(true)
+      setError('')
+    } catch (err: any) {
+      setError(err.response?.data?.error?.message || '发送验证码失败')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleLogin = async () => {
+    if (code.length !== 6) {
+      setError('请输入6位验证码')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+
+    try {
+      const response = await api.post('/auth/verify-code', { phone, code })
+      const { accessToken, provider } = response.data.data
+
+      // 保存 token
+      localStorage.setItem('accessToken', accessToken)
+      localStorage.setItem('provider', JSON.stringify(provider))
+
+      // 跳转到引导页或仪表盘
+      if (provider.isOnboarded) {
+        navigate('/dashboard')
+      } else {
+        navigate('/onboarding')
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.error?.message || '登录失败')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+      <div className="max-w-md w-full">
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 mb-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
+              <span className="text-white text-2xl">🌐</span>
+            </div>
+            <span className="text-2xl font-bold text-gray-900">全民GEO</span>
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900">
+            {codeSent ? '输入验证码' : '手机号登录'}
+          </h1>
+          <p className="text-gray-500 mt-2">
+            {codeSent ? `验证码已发送至 ${phone}` : '输入手机号，快速登录'}
+          </p>
+        </div>
+
+        {/* 表单卡片 */}
+        <div className="bg-white rounded-2xl shadow-sm p-8 border border-gray-100">
+          {!codeSent ? (
+            <>
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  手机号
+                </label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="请输入手机号"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  maxLength={11}
+                />
+              </div>
+
+              {error && (
+                <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
+                  {error}
+                </div>
+              )}
+
+              <button
+                onClick={handleSendCode}
+                disabled={loading}
+                className="w-full py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition-colors font-semibold disabled:opacity-50"
+              >
+                {loading ? '发送中...' : '获取验证码'}
+              </button>
+
+              <p className="mt-4 text-center text-sm text-green-600">
+                💡 测试环境：直接输入 123456 即可登录
+              </p>
+            </>
+          ) : (
+            <>
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  验证码
+                </label>
+                <input
+                  type="text"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  placeholder="请输入6位验证码"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-center text-2xl tracking-widest"
+                  maxLength={6}
+                  autoFocus
+                />
+              </div>
+
+              {error && (
+                <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
+                  {error}
+                </div>
+              )}
+
+              <button
+                onClick={handleLogin}
+                disabled={loading || code.length !== 6}
+                className="w-full py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition-colors font-semibold disabled:opacity-50"
+              >
+                {loading ? '登录中...' : '登录'}
+              </button>
+
+              <button
+                onClick={() => {
+                  setCodeSent(false)
+                  setCode('')
+                  setError('')
+                }}
+                className="mt-4 w-full py-3 text-gray-600 hover:text-orange-600 transition-colors"
+              >
+                重新输入手机号
+              </button>
+
+              <div className="mt-4 text-center">
+                <button
+                  onClick={handleSendCode}
+                  disabled={loading}
+                  className="text-sm text-orange-600 hover:underline disabled:opacity-50"
+                >
+                  {loading ? '重新发送中...' : '重新获取验证码'}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* 底部 */}
+        <p className="mt-8 text-center text-sm text-gray-500">
+          还没有账号？{' '}
+          <button
+            onClick={() => navigate('/register')}
+            className="text-orange-600 hover:underline"
+          >
+            立即入驻
+          </button>
+        </p>
+      </div>
+    </div>
+  )
+}
+
+export default LoginPage

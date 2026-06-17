@@ -1,0 +1,341 @@
+// Prisma Schema - 文旅 GEO 服务平台 (SQLite版本)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ──────────────────────────────────────────────────────────────
+// 文旅资源（核心实体）
+// ──────────────────────────────────────────────────────────────
+
+model TourismResource {
+  id          String   @id @default(uuid())
+  phone       String   @unique
+  name        String
+  avatar      String?
+  description String?
+  
+  city        String
+  district    String?
+  scenicArea  String?
+  
+  resourceType String   // SCENIC_SPOT, HOTEL, CREATIVE_SHOP, PLAY_ITEM, SECOND_CONSUME
+  
+  isVerified      Boolean @default(false)
+  realName        String?
+  
+  avgRating       Float   @default(0)
+  reviewCount     Int     @default(0)
+  
+  status      String @default("ACTIVE") // ACTIVE, INACTIVE, BANNED
+  
+  categoryId  String
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  geoLocation       GeoLocation?
+  category          ResourceCategory @relation(fields: [categoryId], references: [id])
+  articles          ContentArticle[]
+  certificates      Certificate[]
+  reviews           Review[]
+  platformAccounts  PlatformAccount[]
+  distributionLinks DistributionLink[]
+  resourceMedia     ResourceMedia[]
+
+  @@map("tourism_resources")
+}
+
+// ──────────────────────────────────────────────────────────────
+// 地理位置
+// ──────────────────────────────────────────────────────────────
+
+model GeoLocation {
+  id            String  @id @default(uuid())
+  resourceId    String  @unique
+  resource      TourismResource @relation(fields: [resourceId], references: [id])
+
+  latitude      Float
+  longitude     Float
+  fullAddress   String
+
+  serviceRadiusKm Int @default(5)
+  geoHash       String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([geoHash])
+  @@map("geo_locations")
+}
+
+// ──────────────────────────────────────────────────────────────
+// 文旅资源分类
+// ──────────────────────────────────────────────────────────────
+
+model ResourceCategory {
+  id         String  @id @default(uuid())
+  name       String
+  parentId   String?
+  level      Int
+  iconKey    String?
+  resourceType String
+
+  resources  TourismResource[]
+
+  @@map("resource_categories")
+}
+
+// ──────────────────────────────────────────────────────────────
+// 分销链接
+// ──────────────────────────────────────────────────────────────
+
+model DistributionLink {
+  id            String   @id @default(uuid())
+  resourceId    String
+  resource      TourismResource @relation(fields: [resourceId], references: [id])
+
+  linkType      String   // DIRECT_LINK, DISTRIBUTION
+  linkUrl       String
+  platform      String?
+  
+  commissionRate Float?
+  
+  isActive      Boolean @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  commissionRecords CommissionRecord[]
+
+  @@map("distribution_links")
+}
+
+// ──────────────────────────────────────────────────────────────
+// 佣金记录
+// ──────────────────────────────────────────────────────────────
+
+model CommissionRecord {
+  id            String   @id @default(uuid())
+  linkId        String
+  link          DistributionLink @relation(fields: [linkId], references: [id])
+
+  orderId       String?
+  orderAmount   Float
+  commissionAmount Float
+  
+  transactionAt DateTime @default(now())
+  status        String @default("PENDING") // PENDING, CONFIRMED, SETTLED, CANCELLED
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("commission_records")
+}
+
+// ──────────────────────────────────────────────────────────────
+// AI 生成的宣传内容
+// ──────────────────────────────────────────────────────────────
+
+model ContentArticle {
+  id           String   @id @default(uuid())
+  resourceId   String
+  resource     TourismResource @relation(fields: [resourceId], references: [id])
+
+  targetPlatform String
+  title         String
+  content       String
+
+  seoKeywords  String  // JSON字符串
+  geoKeywords  String  // JSON字符串
+
+  schemaOrgType String @default("TouristAttraction")
+
+  status       String @default("DRAFT") // DRAFT, APPROVED, DISTRIBUTING, PUBLISHED, FAILED
+
+  generatedAt  DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  distributions DistributionRecord[]
+
+  @@map("content_articles")
+}
+
+// ──────────────────────────────────────────────────────────────
+// 分发记录
+// ──────────────────────────────────────────────────────────────
+
+model DistributionRecord {
+  id          String   @id @default(uuid())
+  articleId   String
+  article     ContentArticle @relation(fields: [articleId], references: [id])
+
+  platform    String
+
+  externalUrl String?
+  status      String @default("PENDING") // PENDING, SUCCESS, FAILED, UNDER_REVIEW
+
+  viewCount  Int @default(0)
+  isIndexed  Boolean @default(false)
+  indexedAt  DateTime?
+  errorMsg   String?
+
+  distributedAt DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("distribution_records")
+}
+
+// ──────────────────────────────────────────────────────────────
+// 平台账号绑定
+// ──────────────────────────────────────────────────────────────
+
+model PlatformAccount {
+  id          String   @id @default(uuid())
+  resourceId  String
+  resource    TourismResource @relation(fields: [resourceId], references: [id])
+
+  platform    String
+  openId      String?
+  accessToken String?
+  refreshToken String?
+  expiresAt   DateTime?
+  status      String @default("PENDING") // PENDING, ACTIVE, EXPIRED, REVOKED
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([resourceId, platform])
+  @@map("platform_accounts")
+}
+
+// ──────────────────────────────────────────────────────────────
+// 文旅资源媒体文件
+// ──────────────────────────────────────────────────────────────
+
+model ResourceMedia {
+  id          String   @id @default(uuid())
+  resourceId  String
+  resource    TourismResource @relation(fields: [resourceId], references: [id])
+
+  mediaType   String   // IMAGE, VIDEO
+  url         String
+  thumbnailUrl String?
+  fileName    String
+  fileSize    Int
+  
+  width       Int?
+  height      Int?
+  duration    Int?
+  
+  title       String?
+  sortOrder   Int @default(0)
+  isPrimary   Boolean @default(false)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("resource_media")
+}
+
+// ──────────────────────────────────────────────────────────────
+// 资质证书
+// ──────────────────────────────────────────────────────────────
+
+model Certificate {
+  id          String   @id @default(uuid())
+  resourceId  String
+  resource    TourismResource @relation(fields: [resourceId], references: [id])
+
+  certType    String  // IDENTITY, BUSINESS_LICENSE, SCENIC_LICENSE, HOTEL_LICENSE, AWARD, OTHER
+  imageUrl    String
+  description String?
+
+  status      String @default("PENDING") // PENDING, APPROVED, REJECTED
+  verifiedAt  DateTime?
+  verifiedBy  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("certificates")
+}
+
+// ──────────────────────────────────────────────────────────────
+// 评价
+// ──────────────────────────────────────────────────────────────
+
+model Review {
+  id           String   @id @default(uuid())
+  resourceId   String
+  resource     TourismResource @relation(fields: [resourceId], references: [id])
+
+  reviewerName String?
+  rating       Float
+  comment      String?
+  imageUrls    String  // JSON字符串
+
+  isVerified   Boolean @default(false)
+  verifyToken  String? @unique
+
+  createdAt DateTime @default(now())
+
+  @@map("reviews")
+}
+
+// ──────────────────────────────────────────────────────────────
+// 短信验证码
+// ──────────────────────────────────────────────────────────────
+
+model SmsCode {
+  id        String   @id @default(uuid())
+  phone     String
+  code      String
+  purpose   String
+  usedAt    DateTime?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([phone, purpose])
+  @@map("sms_codes")
+}
+
+// ──────────────────────────────────────────────────────────────
+// 分发渠道配置
+// ──────────────────────────────────────────────────────────────
+
+model PlatformChannel {
+  id            String  @id @default(uuid())
+  platform      String @unique
+  displayName   String
+  iconUrl       String?
+  isLlmFriendly Boolean @default(false)
+  authType      String
+  config        String? // JSON字符串
+
+  @@map("platform_channels")
+}
+
+// ──────────────────────────────────────────────────────────────
+// 文旅行业管理人员
+// ──────────────────────────────────────────────────────────────
+
+model IndustryAdmin {
+  id          String   @id @default(uuid())
+  phone       String   @unique
+  name        String
+  role        String   // REGION_ADMIN, SCENIC_ADMIN, PLATFORM_ADMIN
+  region      String
+  isVerified  Boolean @default(false)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("industry_admins")
+}
