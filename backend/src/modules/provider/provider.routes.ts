@@ -107,23 +107,21 @@ router.put('/me', authenticate, async (req: Request, res: Response) => {
 
 // ── 更新地理位置 ──
 const updateGeoSchema = z.object({
-  latitude: z.number().min(-90).max(90),
-  longitude: z.number().min(-180).max(180),
+  latitude: z.number().min(-90).max(90).optional().nullable(),
+  longitude: z.number().min(-180).max(180).optional().nullable(),
   fullAddress: z.string().min(1).max(200),
+  city: z.string().min(1).max(50).optional(),
+  district: z.string().max(50).optional().nullable(),
   serviceRadiusKm: z.number().min(1).max(50).optional().default(3)
 })
 
 router.put('/me/geo', authenticate, async (req: Request, res: Response) => {
   try {
     const providerId = req.providerId!
-    const { latitude, longitude, fullAddress, serviceRadiusKm } = updateGeoSchema.parse(req.body)
+    const { latitude, longitude, fullAddress, city, district, serviceRadiusKm } = updateGeoSchema.parse(req.body)
 
-    // 计算 GeoHash
-    const geoHash = calculateGeoHash(latitude, longitude)
-
-    // 解析城市和区县（简化处理，实际应调用高德 API）
-    const city = req.body.city || ''
-    const district = req.body.district || ''
+    // 计算 GeoHash（如果有经纬度）
+    const geoHash = latitude && longitude ? calculateGeoHash(latitude, longitude) : null
 
     // 更新或创建地理位置
     const geoLocation = await prisma.geoLocation.upsert({
@@ -137,8 +135,8 @@ router.put('/me/geo', authenticate, async (req: Request, res: Response) => {
       },
       create: {
         providerId,
-        latitude,
-        longitude,
+        latitude: latitude || 0,
+        longitude: longitude || 0,
         fullAddress,
         serviceRadiusKm,
         geoHash
@@ -149,8 +147,8 @@ router.put('/me/geo', authenticate, async (req: Request, res: Response) => {
     await prisma.provider.update({
       where: { id: providerId },
       data: {
-        city: req.body.city || '',
-        district: req.body.district || ''
+        city: city || '',
+        district: district || ''
       }
     })
 

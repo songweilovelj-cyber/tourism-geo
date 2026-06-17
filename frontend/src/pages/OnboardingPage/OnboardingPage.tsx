@@ -116,10 +116,27 @@ function OnboardingPage() {
     }
     // 2. 如果手动输入了经纬度
     else if (manualLat && manualLng) {
-      latitude = parseFloat(manualLat)
-      longitude = parseFloat(manualLng)
-      if (isNaN(latitude) || isNaN(longitude)) {
-        setError('经纬度格式不正确')
+      // 解析经纬度，支持多种格式
+      const parseCoord = (val: string): number | null => {
+        if (!val) return null
+        const trimmed = val.trim()
+        // 尝试直接解析为数字
+        const num = parseFloat(trimmed)
+        if (!isNaN(num)) return num
+        // 尝试解析度分秒格式 (如: 39°54'38" 或 39°54′38″)
+        const dmsMatch = trimmed.match(/^(\d+(?:\.\d+)?)[°](\d+(?:\.\d+)?)?['′]?(\d+(?:\.\d+)?)?["″]?$/)
+        if (dmsMatch) {
+          const [, d, m = '0', s = '0'] = dmsMatch
+          return parseFloat(d) + parseFloat(m) / 60 + parseFloat(s) / 3600
+        }
+        return null
+      }
+
+      latitude = parseCoord(manualLat)
+      longitude = parseCoord(manualLng)
+
+      if (latitude === null || longitude === null) {
+        setError("经纬度格式不正确，请输入数字（如：39.9101）或度分秒格式（如：39°54'38）")
         setLoading(false)
         return
       }

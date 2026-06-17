@@ -8,6 +8,7 @@ import path from 'path'
 import authRoutes from '@/modules/auth/auth.routes'
 import resourceRoutes from '@/modules/resource/resource.routes'  // 文旅资源路由
 import categoryRoutes from '@/modules/category/category.routes'  // 分类路由
+import providerRoutes from '@/modules/provider/provider.routes'  // 服务者路由
 import geoRoutes from '@/modules/geo/geo.routes'
 import contentRoutes from '@/modules/content/content.routes'
 import platformRoutes from '@/modules/platform/platform.routes'
@@ -40,6 +41,7 @@ export function createApp(): Express {
   // ── API 路由 ──
   app.use('/api/auth', authRoutes)
   app.use('/api/resources', resourceRoutes)       // 文旅资源
+  app.use('/api/providers', providerRoutes)       // 服务者
   app.use('/api/categories', categoryRoutes)      // 分类
   app.use('/api/geo', geoRoutes)
   app.use('/api/content', contentRoutes)

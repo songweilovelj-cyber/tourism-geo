@@ -23,7 +23,8 @@ interface Provider {
 
 interface GeoLocation {
   id: string
-  providerId: string
+  providerId?: string
+  resourceId?: string
   latitude: number
   longitude: number
   fullAddress: string
@@ -42,6 +43,66 @@ interface ServiceItem {
   priceUnit?: string
   tags: string[]
   isActive: boolean
+}
+
+// ========== 文旅资源（TourismResource）模型 ==========
+interface TourismResource {
+  id: string
+  phone: string
+  name: string
+  avatar?: string
+  description?: string
+  city: string
+  district?: string
+  scenicArea?: string
+  resourceType: string
+  isVerified: boolean
+  realName?: string
+  avgRating: number
+  reviewCount: number
+  status: string
+  categoryId: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+interface ResourceCategory {
+  id: string
+  name: string
+  parentId?: string
+  level: number
+  iconKey?: string
+  resourceType: string
+}
+
+interface ResourceMedia {
+  id: string
+  resourceId: string
+  mediaType: string
+  url: string
+  thumbnailUrl?: string
+  fileName: string
+  fileSize: number
+  width?: number
+  height?: number
+  duration?: number
+  title?: string
+  sortOrder: number
+  isPrimary: boolean
+  createdAt: Date
+  updatedAt: Date
+}
+
+interface DistributionLink {
+  id: string
+  resourceId: string
+  linkType: string
+  linkUrl: string
+  platform?: string
+  commissionRate?: number
+  isActive: boolean
+  createdAt: Date
+  updatedAt: Date
 }
 
 interface ContentArticle {
@@ -79,7 +140,8 @@ interface PlatformAccount {
 
 interface Review {
   id: string
-  providerId: string
+  providerId?: string
+  resourceId?: string
   reviewerName?: string
   rating: number
   comment?: string
@@ -113,6 +175,12 @@ class Store {
   platformAccounts: Map<string, PlatformAccount> = new Map()
   reviews: Map<string, Review> = new Map()
   smsCodes: Map<string, SmsCode> = new Map()
+
+  // 文旅资源相关
+  tourismResources: Map<string, TourismResource> = new Map()
+  resourceCategories: Map<string, ResourceCategory> = new Map()
+  resourceMedia: Map<string, ResourceMedia> = new Map()
+  distributionLinks: Map<string, DistributionLink> = new Map()
 }
 
 const store = new Store()
@@ -309,6 +377,153 @@ function initDefaultData() {
   ]
   reviews.forEach(r => store.reviews.set(r.id, r))
 
+  // ========== 文旅资源分类 ==========
+  const resourceCategories: ResourceCategory[] = [
+    { id: 'rc-scenic-1', name: '自然景区', level: 1, resourceType: 'SCENIC_SPOT' },
+    { id: 'rc-scenic-2', name: '人文景区', level: 1, resourceType: 'SCENIC_SPOT' },
+    { id: 'rc-scenic-3', name: '主题公园', level: 1, resourceType: 'SCENIC_SPOT' },
+    { id: 'rc-hotel-1', name: '星级酒店', level: 1, resourceType: 'HOTEL' },
+    { id: 'rc-hotel-2', name: '精品民宿', level: 1, resourceType: 'HOTEL' },
+    { id: 'rc-hotel-3', name: '经济酒店', level: 1, resourceType: 'HOTEL' },
+    { id: 'rc-creative-1', name: '文创商店', level: 1, resourceType: 'CREATIVE_SHOP' },
+    { id: 'rc-creative-2', name: '特产店', level: 1, resourceType: 'CREATIVE_SHOP' },
+    { id: 'rc-play-1', name: '游乐设施', level: 1, resourceType: 'PLAY_ITEM' },
+    { id: 'rc-play-2', name: '演出表演', level: 1, resourceType: 'PLAY_ITEM' },
+    { id: 'rc-food-1', name: '特色餐饮', level: 1, resourceType: 'SECOND_CONSUME' },
+    { id: 'rc-food-2', name: '休闲服务', level: 1, resourceType: 'SECOND_CONSUME' }
+  ]
+  resourceCategories.forEach(c => store.resourceCategories.set(c.id, c))
+
+  // ========== 文旅资源示例数据 ==========
+  const tourismResources: TourismResource[] = [
+    {
+      id: '1',
+      phone: '13900000001',
+      name: '黄山风景区',
+      description: '黄山，世界文化与自然双重遗产，世界地质公园，国家AAAAA级旅游景区。以奇松、怪石、云海、温泉、冬雪五绝著称于世。主峰莲花峰海拔1864米，是华东地区最高的山峰之一。',
+      city: '安徽省黄山市',
+      district: '黄山区',
+      scenicArea: '黄山风景区',
+      resourceType: 'SCENIC_SPOT',
+      isVerified: true,
+      avgRating: 4.9,
+      reviewCount: 15680,
+      status: 'ACTIVE',
+      categoryId: 'rc-scenic-1',
+      createdAt: new Date('2024-01-15'),
+      updatedAt: new Date()
+    },
+    {
+      id: '2',
+      phone: '13900000002',
+      name: '云海民宿',
+      description: '坐落于黄山脚下汤口镇的精品民宿，推窗即可欣赏到壮丽的山景和云海。民宿提供舒适的住宿环境、地道的徽州美食，以及专业的登山向导服务。',
+      city: '安徽省黄山市',
+      district: '黄山区',
+      scenicArea: '黄山风景区',
+      resourceType: 'HOTEL',
+      isVerified: true,
+      avgRating: 4.8,
+      reviewCount: 326,
+      status: 'ACTIVE',
+      categoryId: 'rc-hotel-2',
+      createdAt: new Date('2024-02-20'),
+      updatedAt: new Date()
+    },
+    {
+      id: '3',
+      phone: '13900000003',
+      name: '徽州文创馆',
+      description: '传承徽州千年木雕技艺的文创精品店，每一件作品都由非遗传承人手工打造。主营徽州木雕、竹雕、砚台等工艺品，是选购伴手礼的绝佳去处。',
+      city: '安徽省黄山市',
+      district: '屯溪区',
+      scenicArea: '黄山老街',
+      resourceType: 'CREATIVE_SHOP',
+      isVerified: true,
+      avgRating: 5.0,
+      reviewCount: 156,
+      status: 'ACTIVE',
+      categoryId: 'rc-creative-1',
+      createdAt: new Date('2024-03-10'),
+      updatedAt: new Date()
+    },
+    {
+      id: '4',
+      phone: '13900000004',
+      name: '玉屏索道',
+      description: '亚洲最长的高山索道之一，全长2176米，落差750米。乘坐索道可直达玉屏楼景区，俯瞰天都峰、莲花峰等著名景点，节省体力，轻松欣赏绝美山景。',
+      city: '安徽省黄山市',
+      district: '黄山区',
+      scenicArea: '黄山风景区',
+      resourceType: 'PLAY_ITEM',
+      isVerified: true,
+      avgRating: 4.7,
+      reviewCount: 892,
+      status: 'ACTIVE',
+      categoryId: 'rc-play-1',
+      createdAt: new Date('2024-04-05'),
+      updatedAt: new Date()
+    },
+    {
+      id: '5',
+      phone: '13900000005',
+      name: '徽香源餐厅',
+      description: '传承百年的徽州老字号，主打正宗徽菜。臭鳜鱼、毛豆腐、黄山烧饼等特色美食一应俱全，让您品尝地道的徽州味道。',
+      city: '安徽省黄山市',
+      district: '黄山区',
+      scenicArea: '黄山风景区',
+      resourceType: 'SECOND_CONSUME',
+      isVerified: true,
+      avgRating: 4.9,
+      reviewCount: 445,
+      status: 'ACTIVE',
+      categoryId: 'rc-food-1',
+      createdAt: new Date('2024-05-12'),
+      updatedAt: new Date()
+    }
+  ]
+  tourismResources.forEach(r => store.tourismResources.set(r.id, r))
+
+  // ========== 文旅资源媒体（示例图片） ==========
+  const resourceMedia: ResourceMedia[] = [
+    { id: 'rm-1', resourceId: '1', mediaType: 'IMAGE', url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Huangshan%20Mountain%20scenic%20area%20beautiful%20landscape&image_size=landscape_16_9', fileName: 'huangshan.jpg', fileSize: 1024000, sortOrder: 0, isPrimary: true, createdAt: new Date(), updatedAt: new Date() },
+    { id: 'rm-2', resourceId: '2', mediaType: 'IMAGE', url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cozy%20mountain%20homestay%20hotel%20interior&image_size=landscape_16_9', fileName: 'yunhai.jpg', fileSize: 1024000, sortOrder: 0, isPrimary: true, createdAt: new Date(), updatedAt: new Date() },
+    { id: 'rm-3', resourceId: '3', mediaType: 'IMAGE', url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=traditional%20Chinese%20cultural%20craft%20shop&image_size=landscape_16_9', fileName: 'huizhou.jpg', fileSize: 1024000, sortOrder: 0, isPrimary: true, createdAt: new Date(), updatedAt: new Date() },
+    { id: 'rm-4', resourceId: '4', mediaType: 'IMAGE', url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cable%20car%20ropeway%20mountain%20scenery&image_size=landscape_16_9', fileName: 'yuping.jpg', fileSize: 1024000, sortOrder: 0, isPrimary: true, createdAt: new Date(), updatedAt: new Date() },
+    { id: 'rm-5', resourceId: '5', mediaType: 'IMAGE', url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=traditional%20Chinese%20Huizhou%20cuisine%20restaurant&image_size=landscape_16_9', fileName: 'huixiang.jpg', fileSize: 1024000, sortOrder: 0, isPrimary: true, createdAt: new Date(), updatedAt: new Date() }
+  ]
+  resourceMedia.forEach(m => store.resourceMedia.set(m.id, m))
+
+  // ========== 文旅资源地理位置 ==========
+  const resourceLocations: GeoLocation[] = [
+    { id: 'rl-1', resourceId: '1', latitude: 30.1332, longitude: 118.1694, fullAddress: '安徽省黄山市黄山区黄山风景区', serviceRadiusKm: 10, geoHash: 'wt3y3v' },
+    { id: 'rl-2', resourceId: '2', latitude: 30.0832, longitude: 118.1934, fullAddress: '安徽省黄山市黄山区汤口镇', serviceRadiusKm: 5, geoHash: 'wt3y3w' },
+    { id: 'rl-3', resourceId: '3', latitude: 29.7117, longitude: 118.3175, fullAddress: '安徽省黄山市屯溪区黄山老街', serviceRadiusKm: 3, geoHash: 'wt3v4n' },
+    { id: 'rl-4', resourceId: '4', latitude: 30.1350, longitude: 118.1700, fullAddress: '安徽省黄山市黄山区玉屏索道', serviceRadiusKm: 5, geoHash: 'wt3y3v' },
+    { id: 'rl-5', resourceId: '5', latitude: 30.1000, longitude: 118.1800, fullAddress: '安徽省黄山市黄山区徽香源餐厅', serviceRadiusKm: 3, geoHash: 'wt3y3w' }
+  ]
+  resourceLocations.forEach(l => store.geoLocations.set(l.id, l))
+
+  // ========== 分销链接示例 ==========
+  const distributionLinks: DistributionLink[] = [
+    { id: 'dl-1', resourceId: '1', linkType: 'DIRECT_LINK', linkUrl: 'https://www.huangshan.gov.cn', platform: '官方网站', commissionRate: 0, isActive: true, createdAt: new Date(), updatedAt: new Date() },
+    { id: 'dl-2', resourceId: '1', linkType: 'DISTRIBUTION', linkUrl: 'https://ctrip.com/huangshan', platform: '携程', commissionRate: 5, isActive: true, createdAt: new Date(), updatedAt: new Date() },
+    { id: 'dl-3', resourceId: '2', linkType: 'DIRECT_LINK', linkUrl: 'https://www.yunhai-min.com', platform: '官网预订', commissionRate: 0, isActive: true, createdAt: new Date(), updatedAt: new Date() },
+    { id: 'dl-4', resourceId: '4', linkType: 'DIRECT_LINK', linkUrl: 'https://www.huangshan.gov.cn', platform: '官方渠道', commissionRate: 0, isActive: true, createdAt: new Date(), updatedAt: new Date() },
+    { id: 'dl-5', resourceId: '5', linkType: 'DIRECT_LINK', linkUrl: 'https://www.huixiangyuan.com', platform: '到店用餐', commissionRate: 0, isActive: true, createdAt: new Date(), updatedAt: new Date() }
+  ]
+  distributionLinks.forEach(l => store.distributionLinks.set(l.id, l))
+
+  // ========== 文旅资源评价 ==========
+  const resourceReviews: Review[] = [
+    { id: 'rr-1', resourceId: '1', reviewerName: '游客小王', rating: 5, comment: '黄山太美了！云海壮观，奇松怪石令人叹为观止。', imageUrls: [], createdAt: new Date('2024-01-15') },
+    { id: 'rr-2', resourceId: '1', reviewerName: '旅行达人', rating: 5, comment: '冬季的黄山别有一番风味，银装素裹，宛如仙境。', imageUrls: [], createdAt: new Date('2024-01-10') },
+    { id: 'rr-3', resourceId: '2', reviewerName: '游客小李', rating: 5, comment: '老板人很好，服务周到。房间干净整洁，早餐也很丰盛。', imageUrls: [], createdAt: new Date('2024-01-14') },
+    { id: 'rr-4', resourceId: '4', reviewerName: '带娃出游', rating: 5, comment: '索道很稳，风景超棒！省去了爬山的辛苦。', imageUrls: [], createdAt: new Date('2024-01-11') },
+    { id: 'rr-5', resourceId: '5', reviewerName: '美食家', rating: 5, comment: '臭鳜鱼太好吃了！虽然闻起来有点臭，但是吃起来特别香。', imageUrls: [], createdAt: new Date('2024-01-14') }
+  ]
+  resourceReviews.forEach(r => store.reviews.set(r.id, r))
+
   console.log('[MockDB] 初始化完成，默认数据已加载')
 }
 
@@ -394,15 +609,28 @@ export const prisma = {
   // GeoLocation
   geoLocation: {
     findMany: async () => Array.from(store.geoLocations.values()),
-    findUnique: async ({ where }: { where: { providerId: string } }) => {
-      return Array.from(store.geoLocations.values()).find(g => g.providerId === where.providerId) || null
+    findUnique: async ({ where }: { where: { providerId?: string; resourceId?: string; id?: string } }) => {
+      if (where.providerId) {
+        return Array.from(store.geoLocations.values()).find(g => g.providerId === where.providerId) || null
+      }
+      if (where.resourceId) {
+        return Array.from(store.geoLocations.values()).find(g => g.resourceId === where.resourceId) || null
+      }
+      if (where.id) {
+        return store.geoLocations.get(where.id) || null
+      }
+      return null
     },
     upsert: async ({ where, create, update }: {
-      where: { providerId: string }
+      where: { providerId?: string; resourceId?: string }
       create: Omit<GeoLocation, 'id'>
       update: Partial<GeoLocation>
     }) => {
-      const existing = Array.from(store.geoLocations.values()).find(g => g.providerId === where.providerId)
+      const existing = Array.from(store.geoLocations.values()).find(g => {
+        if (where.providerId) return g.providerId === where.providerId
+        if (where.resourceId) return g.resourceId === where.resourceId
+        return false
+      })
       if (existing) {
         const updated = { ...existing, ...update }
         store.geoLocations.set(existing.id, updated)
@@ -411,6 +639,285 @@ export const prisma = {
       const geo: GeoLocation = { id: randomUUID(), ...create }
       store.geoLocations.set(geo.id, geo)
       return geo
+    }
+  },
+
+  // ========== TourismResource（文旅资源）==========
+  tourismResource: {
+    findUnique: async ({ where, include }: { where: { id?: string; phone?: string; status?: string }; include?: any }) => {
+      let resource: TourismResource | null = null
+      if (where.id) {
+        resource = store.tourismResources.get(where.id) || null
+      } else if (where.phone) {
+        resource = Array.from(store.tourismResources.values()).find(r => r.phone === where.phone) || null
+      }
+      if (!resource) return null
+      // 如果指定了 status 但资源状态不匹配
+      if (where.status && resource.status !== where.status) return null
+
+      if (!include) return resource
+
+      const result: any = { ...resource }
+
+      if (include.geoLocation) {
+        result.geoLocation = Array.from(store.geoLocations.values()).find(g => g.resourceId === resource!.id) || null
+      }
+
+      if (include.category) {
+        result.category = store.resourceCategories.get(resource.categoryId) || null
+      }
+
+      if (include.platformAccounts) {
+        result.platformAccounts = Array.from(store.platformAccounts.values())
+          .filter(a => a.providerId === resource!.id)
+          .filter(a => include.platformAccounts.where?.status ? a.status === include.platformAccounts.where.status : true)
+      }
+
+      if (include.distributionLinks) {
+        let links = Array.from(store.distributionLinks.values()).filter(l => l.resourceId === resource!.id)
+        if (include.distributionLinks.where?.isActive !== undefined) {
+          links = links.filter(l => l.isActive === include.distributionLinks.where.isActive)
+        }
+        result.distributionLinks = links
+      }
+
+      if (include.reviews) {
+        const reviews = Array.from(store.reviews.values()).filter(r => r.resourceId === resource!.id)
+        if (include.reviews.orderBy?.createdAt === 'desc') {
+          reviews.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+        }
+        if (include.reviews.take) {
+          result.reviews = reviews.slice(0, include.reviews.take)
+        } else {
+          result.reviews = reviews
+        }
+      }
+
+      if (include.resourceMedia) {
+        let media = Array.from(store.resourceMedia.values()).filter(m => m.resourceId === resource!.id)
+        if (include.resourceMedia.orderBy?.sortOrder === 'asc') {
+          media.sort((a, b) => a.sortOrder - b.sortOrder)
+        }
+        result.resourceMedia = media
+      }
+
+      return result
+    },
+    findMany: async ({ where, take, orderBy, include }: {
+      where?: { status?: string; resourceType?: string; categoryId?: string }
+      take?: number
+      orderBy?: { createdAt?: 'asc' | 'desc'; avgRating?: 'asc' | 'desc' }
+      include?: any
+    } = {}) => {
+      let items = Array.from(store.tourismResources.values())
+      if (where?.status) items = items.filter(r => r.status === where.status)
+      if (where?.resourceType) items = items.filter(r => r.resourceType === where.resourceType)
+      if (where?.categoryId) items = items.filter(r => r.categoryId === where.categoryId)
+      if (orderBy?.createdAt === 'desc') items.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      if (orderBy?.avgRating === 'desc') items.sort((a, b) => b.avgRating - a.avgRating)
+      if (take) items = items.slice(0, take)
+
+      if (!include) return items
+
+      return items.map(resource => {
+        const result: any = { ...resource }
+        if (include.geoLocation) {
+          result.geoLocation = Array.from(store.geoLocations.values()).find(g => g.resourceId === resource.id) || null
+        }
+        if (include.category) {
+          result.category = store.resourceCategories.get(resource.categoryId) || null
+        }
+        if (include.resourceMedia) {
+          let media = Array.from(store.resourceMedia.values()).filter(m => m.resourceId === resource.id)
+          if (include.resourceMedia.orderBy?.sortOrder === 'asc') {
+            media.sort((a, b) => a.sortOrder - b.sortOrder)
+          }
+          result.resourceMedia = media
+        }
+        if (include.distributionLinks) {
+          result.distributionLinks = Array.from(store.distributionLinks.values()).filter(l => l.resourceId === resource.id)
+        }
+        return result
+      })
+    },
+    create: async ({ data, include }: { data: Omit<TourismResource, 'id' | 'createdAt' | 'updatedAt'>; include?: any }) => {
+      const resource: TourismResource = {
+        id: randomUUID(),
+        ...data,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+      store.tourismResources.set(resource.id, resource)
+
+      if (!include) return resource
+
+      const result: any = { ...resource }
+      if (include.category) {
+        result.category = store.resourceCategories.get(resource.categoryId) || null
+      }
+      if (include.geoLocation) {
+        result.geoLocation = Array.from(store.geoLocations.values()).find(g => g.resourceId === resource.id) || null
+      }
+      return result
+    },
+    update: async ({ where, data, include }: { where: { id: string }; data: Partial<TourismResource>; include?: any }) => {
+      const resource = store.tourismResources.get(where.id)
+      if (!resource) return null
+      const updated = { ...resource, ...data, updatedAt: new Date() }
+      store.tourismResources.set(where.id, updated)
+
+      if (!include) return updated
+
+      const result: any = { ...updated }
+      if (include.category) {
+        result.category = store.resourceCategories.get(updated.categoryId) || null
+      }
+      if (include.geoLocation) {
+        result.geoLocation = Array.from(store.geoLocations.values()).find(g => g.resourceId === updated.id) || null
+      }
+      return result
+    },
+    upsert: async ({ where, create, update, include }: {
+      where: { id: string }
+      create: any
+      update: Partial<TourismResource>
+      include?: any
+    }) => {
+      const existing = store.tourismResources.get(where.id)
+      if (existing) {
+        // 更新现有记录
+        const updated = { ...existing, ...update, updatedAt: new Date() }
+        store.tourismResources.set(where.id, updated)
+
+        if (!include) return updated
+
+        const result: any = { ...updated }
+        if (include.category) {
+          result.category = store.resourceCategories.get(updated.categoryId) || null
+        }
+        return result
+      } else {
+        // 创建新记录
+        const resource: TourismResource = {
+          id: create.id || randomUUID(),
+          phone: create.phone || 'unknown',
+          name: create.name || '',
+          avatar: create.avatar,
+          description: create.description,
+          city: create.city || '',
+          district: create.district,
+          scenicArea: create.scenicArea,
+          resourceType: create.resourceType || 'SCENIC_SPOT',
+          isVerified: create.isVerified || false,
+          avgRating: create.avgRating || 0,
+          reviewCount: create.reviewCount || 0,
+          status: create.status || 'ACTIVE',
+          categoryId: create.categoryId || '',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+        store.tourismResources.set(resource.id, resource)
+
+        if (!include) return resource
+
+        const result: any = { ...resource }
+        if (include.category) {
+          result.category = store.resourceCategories.get(resource.categoryId) || null
+        }
+        return result
+      }
+    },
+    count: async ({ where }: { where?: { status?: string } } = {}) => {
+      if (!where?.status) return store.tourismResources.size
+      return Array.from(store.tourismResources.values()).filter(r => r.status === where.status).length
+    }
+  },
+
+  // ========== ResourceCategory（文旅资源分类）==========
+  resourceCategory: {
+    findMany: async ({ where, include }: { where?: { resourceType?: string; parentId?: string }; include?: any } = {}) => {
+      let items = Array.from(store.resourceCategories.values())
+      if (where?.resourceType) items = items.filter(c => c.resourceType === where.resourceType)
+      if (where?.parentId !== undefined) {
+        items = items.filter(c => c.parentId === where.parentId)
+      }
+
+      if (!include) return items
+
+      return items.map(cat => {
+        const result: any = { ...cat }
+        if (include.children) {
+          result.children = Array.from(store.resourceCategories.values()).filter(c => c.parentId === cat.id)
+        }
+        return result
+      })
+    },
+    findUnique: async ({ where }: { where: { id: string } }) => {
+      return store.resourceCategories.get(where.id) || null
+    }
+  },
+
+  // ========== ResourceMedia（文旅资源媒体）==========
+  resourceMedia: {
+    findMany: async ({ where, orderBy }: { where?: { resourceId?: string }; orderBy?: { sortOrder?: 'asc' | 'desc' } } = {}) => {
+      let items = Array.from(store.resourceMedia.values())
+      if (where?.resourceId) items = items.filter(m => m.resourceId === where.resourceId)
+      if (orderBy?.sortOrder === 'asc') items.sort((a, b) => a.sortOrder - b.sortOrder)
+      return items
+    },
+    findUnique: async ({ where }: { where: { id: string } }) => {
+      return store.resourceMedia.get(where.id) || null
+    },
+    create: async ({ data }: { data: Omit<ResourceMedia, 'id' | 'createdAt' | 'updatedAt'> }) => {
+      const media: ResourceMedia = {
+        id: randomUUID(),
+        ...data,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+      store.resourceMedia.set(media.id, media)
+      return media
+    },
+    update: async ({ where, data }: { where: { id: string }; data: Partial<ResourceMedia> }) => {
+      const media = store.resourceMedia.get(where.id)
+      if (!media) return null
+      const updated = { ...media, ...data, updatedAt: new Date() }
+      store.resourceMedia.set(where.id, updated)
+      return updated
+    },
+    delete: async ({ where }: { where: { id: string } }) => {
+      store.resourceMedia.delete(where.id)
+      return { id: where.id }
+    }
+  },
+
+  // ========== DistributionLink（分销链接）==========
+  distributionLink: {
+    findMany: async ({ where }: { where?: { resourceId?: string; isActive?: boolean } } = {}) => {
+      let items = Array.from(store.distributionLinks.values())
+      if (where?.resourceId) items = items.filter(l => l.resourceId === where.resourceId)
+      if (where?.isActive !== undefined) items = items.filter(l => l.isActive === where.isActive)
+      return items
+    },
+    findUnique: async ({ where }: { where: { id: string } }) => {
+      return store.distributionLinks.get(where.id) || null
+    },
+    create: async ({ data }: { data: Omit<DistributionLink, 'id' | 'createdAt' | 'updatedAt'> }) => {
+      const link: DistributionLink = {
+        id: randomUUID(),
+        ...data,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+      store.distributionLinks.set(link.id, link)
+      return link
+    },
+    update: async ({ where, data }: { where: { id: string }; data: Partial<DistributionLink> }) => {
+      const link = store.distributionLinks.get(where.id)
+      if (!link) return null
+      const updated = { ...link, ...data, updatedAt: new Date() }
+      store.distributionLinks.set(where.id, updated)
+      return updated
     }
   },
 

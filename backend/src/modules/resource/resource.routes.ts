@@ -86,9 +86,20 @@ router.put('/me', authenticate, async (req: Request, res: Response) => {
     const resourceId = req.providerId!
     const data = updateResourceSchema.parse(req.body)
 
-    const resource = await prisma.tourismResource.update({
+    const resource = await prisma.tourismResource.upsert({
       where: { id: resourceId },
-      data,
+      update: data,
+      create: {
+        id: resourceId,
+        phone: 'unknown',
+        resourceType: 'SCENIC_SPOT',
+        isVerified: false,
+        avgRating: 0,
+        reviewCount: 0,
+        status: 'ACTIVE',
+        city: data.city || '',
+        ...data
+      },
       include: { category: true }
     })
 
@@ -100,10 +111,10 @@ router.put('/me', authenticate, async (req: Request, res: Response) => {
       city: resource.city,
       district: resource.district,
       scenicArea: resource.scenicArea,
-      category: {
+      category: resource.category ? {
         id: resource.category.id,
         name: resource.category.name
-      }
+      } : null
     }))
   } catch (err: any) {
     if (err instanceof z.ZodError) {
@@ -131,43 +142,37 @@ router.put('/me/geo', authenticate, async (req: Request, res: Response) => {
     const resourceId = req.providerId!
     const { latitude, longitude, fullAddress, serviceRadiusKm } = updateGeoSchema.parse(req.body)
 
-    // 只有当有经纬度时，才创建/更新geoLocation记录
+    // 只有当有地址时，才创建/更新geoLocation记录
     let geoLocation = null
-    if (latitude !== undefined && longitude !== undefined) {
-      const geoHash = calculateGeoHash(latitude, longitude)
+    if (fullAddress) {
+      // 如果有经纬度，计算 GeoHash
+      const geoHash = latitude !== undefined && longitude !== undefined ? calculateGeoHash(latitude, longitude) : 'zzzzz'
+      
+      // 获取现有记录的经纬度（如果存在）
+      const existingGeo = await prisma.geoLocation.findUnique({
+        where: { resourceId }
+      })
+
+      // 使用现有经纬度或默认值
+      const finalLat = latitude !== undefined ? latitude : (existingGeo?.latitude || 0)
+      const finalLng = longitude !== undefined ? longitude : (existingGeo?.longitude || 0)
 
       geoLocation = await prisma.geoLocation.upsert({
         where: { resourceId },
         update: {
-          latitude,
-          longitude,
-          fullAddress: fullAddress || '',
-          serviceRadiusKm,
-          geoHash
-        },
-        create: {
-          resourceId,
-          latitude,
-          longitude,
-          fullAddress: fullAddress || '',
-          serviceRadiusKm,
-          geoHash
-        }
-      })
-    } else if (fullAddress) {
-      // 只有地址没有经纬度，也更新 geoLocation，但 geoHash 用默认值
-      geoLocation = await prisma.geoLocation.upsert({
-        where: { resourceId },
-        update: {
-          fullAddress
-        },
-        create: {
-          resourceId,
-          latitude: 0,
-          longitude: 0,
+          latitude: finalLat,
+          longitude: finalLng,
           fullAddress,
           serviceRadiusKm,
-          geoHash: 'zzzzz' // 默认占位
+          geoHash
+        },
+        create: {
+          resourceId,
+          latitude: finalLat,
+          longitude: finalLng,
+          fullAddress,
+          serviceRadiusKm,
+          geoHash
         }
       })
     }
