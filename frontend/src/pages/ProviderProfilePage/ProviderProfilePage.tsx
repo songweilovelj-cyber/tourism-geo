@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { api } from '@/api/client'
-import { GeoLocationDto, ServiceDto, ReviewDto } from '@/types/api'
+import { GeoCoordinate, Review } from '@/types/api'
 
 interface ProviderProfile {
   id: string
@@ -13,9 +13,9 @@ interface ProviderProfile {
   isVerified: boolean
   avgRating: number
   reviewCount: number
-  geoLocation?: GeoLocationDto
-  services: Array<ServiceDto & { category: { id: string; name: string } }>
-  recentReviews: ReviewDto[]
+  geoLocation?: GeoCoordinate
+  services: Array<{ id: string; title: string; description?: string; category: { id: string; name: string }; minPrice?: number; maxPrice?: number; priceUnit?: string; tags?: string[] }>
+  recentReviews: Review[]
   phoneMasked: string
 }
 

@@ -89,6 +89,68 @@ function DashboardPage() {
     commissionRate: ''
   })
 
+  // 媒体文件状态
+  interface MediaFile {
+    id: string
+    mediaType: 'IMAGE' | 'VIDEO'
+    url: string
+    fileName: string
+    fileSize: number
+    isPrimary: boolean
+  }
+  const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([])
+
+  // 获取媒体文件
+  useEffect(() => {
+    const fetchMedia = async () => {
+      try {
+        const response = await api.get('/media')
+        if (response.data.success) {
+          const files: MediaFile[] = response.data.data.map((f: any) => ({
+            id: f.id,
+            mediaType: f.mediaType,
+            url: `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'}${f.url}`,
+            fileName: f.fileName,
+            fileSize: f.fileSize,
+            isPrimary: f.isPrimary
+          }))
+          setMediaFiles(files)
+        }
+      } catch (err) {
+        console.error('Failed to fetch media files')
+      }
+    }
+    fetchMedia()
+  }, [])
+
+  // 获取主图
+  const primaryImage = mediaFiles.find(f => f.isPrimary)
+
+  // 处理媒体上传完成
+  const handleMediaUploadComplete = (files: MediaFile[]) => {
+    setMediaFiles(prev => [...prev, ...files])
+  }
+
+  // 处理媒体删除
+  const handleMediaDelete = (id: string) => {
+    setMediaFiles(prev => prev.filter(f => f.id !== id))
+  }
+
+  // 保存媒体设置
+  const handleSaveMedia = async () => {
+    try {
+      const response = await api.post('/resources/me', {
+        avatar: primaryImage?.url
+      })
+      if (response.data.success) {
+        alert('保存成功')
+      }
+    } catch (err) {
+      console.error('保存失败:', err)
+      alert('保存失败')
+    }
+  }
+
   // 获取用户信息
   useEffect(() => {
     const fetchData = async () => {
@@ -348,13 +410,14 @@ function DashboardPage() {
               >
                 AI 生成文案
               </button>
-              <button
-                onClick={() => navigate(`/r/${provider?.id}`)}
+              <a
+                href={`/r/${provider?.id}`}
                 target="_blank"
-                className="px-4 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+                rel="noopener noreferrer"
+                className="px-4 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-colors text-sm inline-block"
               >
                 预览主页
-              </button>
+              </a>
               <button
                 onClick={() => navigate('/')}
                 className="px-4 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-colors text-sm"
@@ -475,14 +538,15 @@ function DashboardPage() {
                   <div className="text-2xl mb-2">📝</div>
                   <div className="text-sm font-medium text-gray-700">内容分发</div>
                 </button>
-                <button
-                  onClick={() => navigate(`/r/${provider?.id}`)}
+                <a
+                  href={`/r/${provider?.id}`}
                   target="_blank"
-                  className="p-4 border border-gray-200 rounded-xl hover:border-green-300 hover:bg-green-50 transition-colors text-center"
+                  rel="noopener noreferrer"
+                  className="p-4 border border-gray-200 rounded-xl hover:border-green-300 hover:bg-green-50 transition-colors text-center block"
                 >
                   <div className="text-2xl mb-2">👁️</div>
                   <div className="text-sm font-medium text-gray-700">预览主页</div>
-                </button>
+                </a>
               </div>
             </div>
 
@@ -579,11 +643,51 @@ function DashboardPage() {
         {activeTab === 'media' && (
           <div className="space-y-6">
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-              <h3 className="font-semibold text-gray-900 mb-4">图片和视频上传</h3>
-              <p className="text-sm text-gray-500 mb-6">
-                上传精美的图片和视频，让游客更直观地了解您的文旅资源。建议上传景区环境、客房设施、特色项目等图片。
-              </p>
-              <MediaUploader />
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="font-semibold text-gray-900">图片和视频管理</h3>
+                  <p className="text-sm text-gray-500 mt-1">
+                    上传精美的图片和视频，让游客更直观地了解您的文旅资源。建议上传景区环境、客房设施、特色项目等图片。
+                  </p>
+                </div>
+                <button
+                  onClick={handleSaveMedia}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"
+                >
+                  保存设置
+                </button>
+              </div>
+              
+              {/* 主图展示 */}
+              <div className="mb-6">
+                <h4 className="text-sm font-medium text-gray-700 mb-3">主图展示</h4>
+                <div className="flex gap-4">
+                  {primaryImage ? (
+                    <div className="relative w-48 h-32 rounded-lg overflow-hidden border-2 border-green-500">
+                      <img
+                        src={primaryImage.url}
+                        alt="主图"
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute top-2 right-2 px-2 py-1 bg-green-600 text-white text-xs rounded">主图</div>
+                    </div>
+                  ) : (
+                    <div className="w-48 h-32 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                      <span className="text-gray-400 text-sm">暂无主图</span>
+                    </div>
+                  )}
+                  <div className="flex-1 p-4 bg-gray-50 rounded-lg">
+                    <p className="text-sm text-gray-600">主图将作为您文旅资源的封面展示</p>
+                    <p className="text-xs text-gray-400 mt-2">建议尺寸：1200 x 800 像素</p>
+                  </div>
+                </div>
+              </div>
+
+              <MediaUploader 
+                initialFiles={mediaFiles}
+                onUploadComplete={handleMediaUploadComplete}
+                onFileDelete={handleMediaDelete}
+              />
             </div>
           </div>
         )}

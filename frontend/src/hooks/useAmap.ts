@@ -3,14 +3,33 @@ import { useEffect, useRef, useCallback } from 'react'
 
 const AMAP_KEY = import.meta.env.VITE_AMAP_WEB_API_KEY || '***'
 
+// 声明 AMap 类型
+declare global {
+  interface Window {
+    AMap?: any
+  }
+}
+
+interface AmapMap {
+  destroy: () => void
+  setCenter: (center: [number, number]) => void
+  setZoom: (zoom: number) => void
+  addControl: (control: any) => void
+  addMarker: (marker: any) => void
+  getCenter: () => [number, number]
+  getZoom: () => number
+  on: (event: string, callback: (e: any) => void) => void
+  off: (event: string, callback: (e: any) => void) => void
+}
+
 interface UseAmapOptions {
-  onReady?: (map: AMap.Map) => void
+  onReady?: (map: AmapMap) => void
   onError?: (error: Error) => void
 }
 
 export function useAmap(options?: UseAmapOptions) {
   const mapRef = useRef<HTMLDivElement>(null)
-  const mapInstance = useRef<AMap.Map | null>(null)
+  const mapInstance = useRef<AmapMap | null>(null)
   const isLoaded = useRef(false)
 
   const initMap = useCallback(async () => {

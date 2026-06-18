@@ -89,11 +89,14 @@ router.post('/verify-code', async (req: Request, res: Response) => {
       })
     }
 
-    // 查找或创建服务者
-    let provider = await prisma.provider.findUnique({ where: { phone } })
+    // 先查找文旅资源（优先）
+    let resource = await prisma.tourismResource.findUnique({ where: { phone } })
+    
+    // 如果没有找到文旅资源，查找普通服务者
+    let provider = resource ? null : await prisma.provider.findUnique({ where: { phone } })
 
-    if (!provider) {
-      // 新用户注册
+    // 如果都没有，创建新的服务者（用于新用户注册）
+    if (!resource && !provider) {
       provider = await prisma.provider.create({
         data: {
           phone,
@@ -103,23 +106,43 @@ router.post('/verify-code', async (req: Request, res: Response) => {
       })
     }
 
+    // 确定使用哪个ID（文旅资源优先）
+    const targetId = resource?.id || provider!.id
+    const isResource = !!resource
+
     // 生成 JWT
     const tokens = generateTokens({
-      providerId: provider.id,
-      phone: provider.phone
+      providerId: targetId,
+      phone: phone,
+      isResource: isResource
     })
+
+    // 返回用户信息（优先返回文旅资源）
+    const userData = resource ? {
+      id: resource.id,
+      name: resource.name,
+      nickname: resource.name,
+      avatar: resource.avatar,
+      city: resource.city,
+      district: resource.district,
+      isVerified: resource.isVerified,
+      isOnboarded: !!resource.city,
+      resourceType: resource.resourceType,
+      categoryId: resource.categoryId
+    } : {
+      id: provider!.id,
+      nickname: provider!.nickname,
+      avatar: provider!.avatar,
+      city: provider!.city,
+      isVerified: provider!.isVerified,
+      isOnboarded: !!provider!.city
+    }
 
     res.json(success({
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
-      provider: {
-        id: provider.id,
-        nickname: provider.nickname,
-        avatar: provider.avatar,
-        city: provider.city,
-        isVerified: provider.isVerified,
-        isOnboarded: !!provider.city // 是否已完成入驻引导
-      }
+      provider: userData,
+      isResource: isResource
     }))
   } catch (err: any) {
     if (err instanceof z.ZodError) {

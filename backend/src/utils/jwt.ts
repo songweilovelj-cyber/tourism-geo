@@ -8,6 +8,7 @@ const REFRESH_TOKEN_EXPIRES = '30d'
 interface TokenPayload {
   providerId: string
   phone: string
+  isResource?: boolean
 }
 
 interface TokenPair {

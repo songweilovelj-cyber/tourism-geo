@@ -398,9 +398,9 @@ function initDefaultData() {
   const tourismResources: TourismResource[] = [
     {
       id: '1',
-      phone: '13900000001',
-      name: '黄山风景区',
-      description: '黄山，世界文化与自然双重遗产，世界地质公园，国家AAAAA级旅游景区。以奇松、怪石、云海、温泉、冬雪五绝著称于世。主峰莲花峰海拔1864米，是华东地区最高的山峰之一。',
+      phone: '13800138000',
+      name: '九龙山景区',
+      description: '九龙山景区是国家AAAA级旅游景区，位于安徽省黄山市境内。景区以壮丽的自然风光和丰富的人文景观著称，拥有九龙瀑布、古寺庙群、珍稀动植物等众多景点，是休闲度假、登山探险的理想目的地。主峰海拔1500米，四季景色各异，春季山花烂漫，秋季红叶满山。',
       city: '安徽省黄山市',
       district: '黄山区',
       scenicArea: '黄山风景区',
@@ -486,7 +486,7 @@ function initDefaultData() {
 
   // ========== 文旅资源媒体（示例图片） ==========
   const resourceMedia: ResourceMedia[] = [
-    { id: 'rm-1', resourceId: '1', mediaType: 'IMAGE', url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Huangshan%20Mountain%20scenic%20area%20beautiful%20landscape&image_size=landscape_16_9', fileName: 'huangshan.jpg', fileSize: 1024000, sortOrder: 0, isPrimary: true, createdAt: new Date(), updatedAt: new Date() },
+    { id: 'rm-1', resourceId: '1', mediaType: 'IMAGE', url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Jiulong%20Mountain%20scenic%20area%20beautiful%20landscape%20China&image_size=landscape_16_9', fileName: 'jiulongshan.jpg', fileSize: 1024000, sortOrder: 0, isPrimary: true, createdAt: new Date(), updatedAt: new Date() },
     { id: 'rm-2', resourceId: '2', mediaType: 'IMAGE', url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cozy%20mountain%20homestay%20hotel%20interior&image_size=landscape_16_9', fileName: 'yunhai.jpg', fileSize: 1024000, sortOrder: 0, isPrimary: true, createdAt: new Date(), updatedAt: new Date() },
     { id: 'rm-3', resourceId: '3', mediaType: 'IMAGE', url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=traditional%20Chinese%20cultural%20craft%20shop&image_size=landscape_16_9', fileName: 'huizhou.jpg', fileSize: 1024000, sortOrder: 0, isPrimary: true, createdAt: new Date(), updatedAt: new Date() },
     { id: 'rm-4', resourceId: '4', mediaType: 'IMAGE', url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cable%20car%20ropeway%20mountain%20scenery&image_size=landscape_16_9', fileName: 'yuping.jpg', fileSize: 1024000, sortOrder: 0, isPrimary: true, createdAt: new Date(), updatedAt: new Date() },

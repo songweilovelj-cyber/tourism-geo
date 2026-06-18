@@ -13,11 +13,20 @@ const PLATFORMS: Array<{ platform: PlatformType; name: string; icon: string; isL
   { platform: 'LANDING_PAGE', name: '平台落地页', icon: '🏠', isLlmFriendly: true }
 ]
 
+// 场景类型配置
+const SCENARIOS = [
+  { id: 'tourist_attraction', name: '景区介绍', description: '适合宣传景区特色和亮点' },
+  { id: 'hotel_accommodation', name: '酒店住宿', description: '适合介绍酒店设施和服务' },
+  { id: 'travel_experience', name: '游玩体验', description: '适合分享游玩攻略和体验' },
+  { id: 'food_dining', name: '美食推荐', description: '适合推荐当地特色美食' },
+  { id: 'cultural_creative', name: '文创特产', description: '适合介绍文创产品和特产' },
+  { id: 'event_activity', name: '活动推广', description: '适合宣传各类活动和节庆' }
+]
+
 function ContentGeneratePage() {
   const navigate = useNavigate()
   const [selectedPlatforms, setSelectedPlatforms] = useState<PlatformType[]>([])
-  const [services, setServices] = useState<Array<{ id: string; title: string }>>([])
-  const [selectedServices, setSelectedServices] = useState<string[]>([])
+  const [selectedScenarios, setSelectedScenarios] = useState<string[]>([])
   const [customKeywords, setCustomKeywords] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
   const [isPublishing, setIsPublishing] = useState(false)
@@ -30,24 +39,6 @@ function ContentGeneratePage() {
   }>>([])
   const [error, setError] = useState('')
 
-  // 获取用户服务列表
-  React.useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await api.get('/services/my')
-        if (response.data.success) {
-          setServices(response.data.data.map((s: any) => ({
-            id: s.id,
-            title: s.title
-          })))
-        }
-      } catch (err) {
-        console.error('Failed to fetch services')
-      }
-    }
-    fetchServices()
-  }, [])
-
   const togglePlatform = (platform: PlatformType) => {
     setSelectedPlatforms(prev =>
       prev.includes(platform)
@@ -56,11 +47,11 @@ function ContentGeneratePage() {
     )
   }
 
-  const toggleService = (serviceId: string) => {
-    setSelectedServices(prev =>
-      prev.includes(serviceId)
-        ? prev.filter(id => id !== serviceId)
-        : [...prev, serviceId]
+  const toggleScenario = (scenarioId: string) => {
+    setSelectedScenarios(prev =>
+      prev.includes(scenarioId)
+        ? prev.filter(id => id !== scenarioId)
+        : [...prev, scenarioId]
     )
   }
 
@@ -94,10 +85,6 @@ function ContentGeneratePage() {
       setError('请至少选择一个平台')
       return
     }
-    if (selectedServices.length === 0) {
-      setError('请至少选择一项服务')
-      return
-    }
 
     setIsGenerating(true)
     setError('')
@@ -105,7 +92,7 @@ function ContentGeneratePage() {
     try {
       const response = await api.post('/content/generate', {
         targetPlatforms: selectedPlatforms,
-        serviceIds: selectedServices,
+        scenarios: selectedScenarios,
         customKeywords: customKeywords.split(',').map(k => k.trim()).filter(Boolean)
       })
 
@@ -178,34 +165,33 @@ function ContentGeneratePage() {
           </div>
         </div>
 
-        {/* 步骤 2: 选择服务 */}
+        {/* 步骤 2: 选择场景类型 */}
         <div className="bg-white rounded-2xl shadow-sm p-8 border border-gray-100 mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-2">选择服务</h2>
-          <p className="text-gray-500 mb-6">选择要宣传的服务（可多选）</p>
+          <h2 className="text-xl font-bold text-gray-900 mb-2">选择场景类型</h2>
+          <p className="text-gray-500 mb-6">选择你想要宣传的内容场景（可多选）</p>
 
-          <div className="space-y-3">
-            {services.length === 0 ? (
-              <p className="text-gray-400">暂无服务，请先添加服务</p>
-            ) : (
-              services.map((service) => (
-                <button
-                  key={service.id}
-                  onClick={() => toggleService(service.id)}
-                  className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
-                    selectedServices.includes(service.id)
-                      ? 'border-orange-500 bg-orange-50'
-                      : 'border-gray-200 hover:border-orange-300'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium text-gray-900">{service.title}</span>
-                    {selectedServices.includes(service.id) && (
-                      <span className="w-6 h-6 bg-orange-500 text-white rounded-full flex items-center justify-center text-sm">✓</span>
-                    )}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {SCENARIOS.map((scenario) => (
+              <button
+                key={scenario.id}
+                onClick={() => toggleScenario(scenario.id)}
+                className={`p-4 rounded-xl border-2 transition-all text-left ${
+                  selectedScenarios.includes(scenario.id)
+                    ? 'border-orange-500 bg-orange-50'
+                    : 'border-gray-200 hover:border-orange-300'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="font-medium text-gray-900 block">{scenario.name}</span>
+                    <span className="text-xs text-gray-500">{scenario.description}</span>
                   </div>
-                </button>
-              ))
-            )}
+                  {selectedScenarios.includes(scenario.id) && (
+                    <span className="w-6 h-6 bg-orange-500 text-white rounded-full flex items-center justify-center text-sm">✓</span>
+                  )}
+                </div>
+              </button>
+            ))}
           </div>
         </div>
 

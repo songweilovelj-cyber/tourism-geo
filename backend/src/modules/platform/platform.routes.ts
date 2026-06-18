@@ -183,7 +183,7 @@ router.post('/distribute', authenticate, async (req: Request, res: Response) => 
 
     // 获取文章
     const article = await prisma.contentArticle.findFirst({
-      where: { id: articleId, providerId }
+      where: { id: articleId, resourceId: providerId }
     })
 
     if (!article) {

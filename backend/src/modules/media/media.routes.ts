@@ -22,6 +22,8 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
     const ext = path.extname(file.originalname)
+    // 对中文文件名进行编码处理
+    const safeFileName = Buffer.from(file.originalname, 'latin1').toString('utf-8')
     cb(null, `media-${uniqueSuffix}${ext}`)
   }
 })

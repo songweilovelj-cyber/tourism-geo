@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import axios from 'axios'
+import { api } from '@/api/client'
 
 interface MediaFile {
   id: string
@@ -66,16 +66,16 @@ export function MediaUploader({ initialFiles = [], onUploadComplete, onFileDelet
     })
 
     try {
-      const response = await axios.post('/api/media', formData, {
+      const response = await api.post('/media', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': undefined
         }
       })
 
       const uploadedFiles: MediaFile[] = response.data.data.files.map((f: any) => ({
         id: f.id,
         mediaType: f.mediaType,
-        url: `${process.env.REACT_APP_API_URL || ''}${f.url}`,
+        url: `${import.meta.env.VITE_API_BASE_URL || ''}${f.url}`,
         fileName: f.fileName,
         fileSize: f.fileSize,
         isPrimary: f.isPrimary
@@ -93,7 +93,7 @@ export function MediaUploader({ initialFiles = [], onUploadComplete, onFileDelet
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`/api/media/${id}`)
+      await api.delete(`/media/${id}`)
       setFiles(prev => prev.filter(f => f.id !== id))
       onFileDelete?.(id)
     } catch (error) {
