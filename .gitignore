@@ -33,6 +33,8 @@ pnpm-debug.log*
 
 # 测试
 coverage/
+test-results/
+screenshots/
 
 # 数据库
 *.db
@@ -41,6 +43,8 @@ coverage/
 # 上传文件
 uploads/*
 !uploads/.gitkeep
+backend/src/uploads/*
+!backend/src/uploads/.gitkeep
 
 # Prisma
 backend/prisma/migrations/

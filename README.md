@@ -220,8 +220,8 @@ npm run build
 
 ## 📬 联系方式
 
-- 项目主页：https://github.com/tourism-geo/tourism-geo
-- 问题反馈：https://github.com/tourism-geo/tourism-geo/issues
+- 项目主页：https://github.com/songweilovelj-cyber/tourism-geo
+- 问题反馈：https://github.com/songweilovelj-cyber/tourism-geo/issues
 - 邮箱：contact@tourism-geo.example.com
 
 ## 📋 路线图
