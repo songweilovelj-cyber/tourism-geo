@@ -69,16 +69,16 @@ function LoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 mb-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
-              <span className="text-white text-2xl">🌐</span>
+            <div className="w-12 h-12 bg-gradient-to-br from-red-700 to-red-800 rounded-xl flex items-center justify-center">
+              <span className="text-white text-2xl">🏛️</span>
             </div>
-            <span className="text-2xl font-bold text-gray-900">全民GEO</span>
+            <span className="text-2xl font-bold text-gray-900">策展助手</span>
           </div>
           <h1 className="text-2xl font-bold text-gray-900">
             {codeSent ? '输入验证码' : '手机号登录'}
           </h1>
           <p className="text-gray-500 mt-2">
-            {codeSent ? `验证码已发送至 ${phone}` : '输入手机号，快速登录'}
+            {codeSent ? `验证码已发送至 ${phone}` : '博物馆策展方案AI辅助生成工具'}
           </p>
         </div>
 

@@ -1,0 +1,1590 @@
+/* ========== 文旅解决方案工作台样式 ========== */
+
+.ts-workspace {
+  display: flex;
+  height: 100vh;
+  background: #0a0a14;
+  color: #e2e8f0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  overflow: hidden;
+}
+
+/* ========== 左侧导航 ========== */
+.ts-sidebar {
+  width: 280px;
+  background: #0d0d1a;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.ts-sidebar-header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ts-logo {
+  font-size: 16px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #4ECDC4, #818CF8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ts-new-btn {
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #4ECDC4, #818CF8);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.ts-new-btn:hover {
+  opacity: 0.9;
+}
+
+.ts-solution-info {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ts-solution-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #f1f5f9;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ts-solution-meta {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.ts-stepper {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+}
+
+.ts-step-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 4px;
+  transition: all 0.2s;
+}
+
+.ts-step-item:hover:not(.locked) {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.ts-step-item.active {
+  background: rgba(78, 205, 196, 0.08);
+  border: 1px solid rgba(78, 205, 196, 0.2);
+}
+
+.ts-step-item.completed {
+  opacity: 0.9;
+}
+
+.ts-step-item.locked {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ts-step-indicator {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.06);
+  color: #94a3b8;
+}
+
+.ts-step-item.active .ts-step-indicator {
+  background: linear-gradient(135deg, #4ECDC4, #818CF8);
+  color: #fff;
+}
+
+.ts-step-item.completed .ts-step-indicator {
+  background: rgba(78, 205, 196, 0.2);
+  color: #4ECDC4;
+}
+
+.ts-step-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.ts-step-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #e2e8f0;
+  margin-bottom: 2px;
+}
+
+.ts-step-desc {
+  font-size: 11px;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ts-sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ts-progress-info {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.ts-progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.ts-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4ECDC4, #818CF8);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+/* ========== 主内容区 ========== */
+.ts-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ts-main-header {
+  padding: 20px 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.ts-page-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 4px;
+}
+
+.ts-page-subtitle {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.ts-header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.ts-content-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 32px;
+}
+
+.ts-step-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ========== 表单 ========== */
+.ts-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.ts-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ts-form-full {
+  grid-column: 1 / -1;
+}
+
+.ts-form-group label {
+  font-size: 13px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.ts-input {
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  color: #e2e8f0;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.ts-input:focus {
+  border-color: rgba(78, 205, 196, 0.4);
+  background: rgba(78, 205, 196, 0.03);
+}
+
+.ts-textarea {
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  color: #e2e8f0;
+  font-size: 14px;
+  outline: none;
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.6;
+  transition: all 0.2s;
+}
+
+.ts-textarea:focus {
+  border-color: rgba(78, 205, 196, 0.4);
+  background: rgba(78, 205, 196, 0.03);
+}
+
+/* ========== 按钮 ========== */
+.ts-primary-btn {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #4ECDC4, #818CF8);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ts-primary-btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.ts-primary-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ts-secondary-btn {
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #e2e8f0;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ts-secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ts-text-btn {
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #94a3b8;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ts-text-btn:hover {
+  color: #4ECDC4;
+  border-color: rgba(78, 205, 196, 0.3);
+}
+
+.ts-full-btn {
+  width: 100%;
+}
+
+.ts-action-bar {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ========== 结果卡片 ========== */
+.ts-result-card {
+  margin-top: 24px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.ts-result-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ts-result-title {
+  font-weight: 500;
+  color: #f1f5f9;
+}
+
+.ts-markdown-preview {
+  padding: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.ts-markdown-preview pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #cbd5e1;
+}
+
+.ts-result-footer {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ts-hint {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* ========== 弹窗 ========== */
+.ts-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.ts-modal {
+  background: #12121f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 32px;
+  width: 480px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.ts-modal-large {
+  width: 800px;
+}
+
+.ts-modal-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 8px;
+}
+
+.ts-modal-desc {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 20px;
+}
+
+.ts-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.ts-editor-textarea {
+  width: 100%;
+  min-height: 400px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* ========== 分类选择 ========== */
+.ts-category-section h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 8px;
+}
+
+.ts-section-desc {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 20px;
+}
+
+.ts-category-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.ts-category-result {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.ts-category-path {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.ts-category-tag {
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.ts-category-tag.active {
+  background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(129, 140, 248, 0.2));
+  color: #4ECDC4;
+  border: 1px solid rgba(78, 205, 196, 0.3);
+}
+
+.ts-category-arrow {
+  color: #64748b;
+  font-size: 16px;
+}
+
+.ts-category-meta {
+  display: flex;
+  gap: 20px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.ts-features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.ts-feature-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.ts-feature-card h4 {
+  font-size: 14px;
+  font-weight: 500;
+  color: #e2e8f0;
+  margin-bottom: 10px;
+}
+
+.ts-feature-card ul {
+  list-style: none;
+}
+
+.ts-feature-card li {
+  padding: 4px 0;
+  font-size: 13px;
+  color: #94a3b8;
+  padding-left: 16px;
+  position: relative;
+}
+
+.ts-feature-card li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #4ECDC4;
+}
+
+.ts-category-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.ts-category-col h4 {
+  font-size: 14px;
+  color: #e2e8f0;
+  margin-bottom: 4px;
+}
+
+.ts-category-col-desc {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 12px;
+}
+
+.ts-category-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ts-category-option {
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ts-category-option:hover {
+  background: rgba(78, 205, 196, 0.05);
+  border-color: rgba(78, 205, 196, 0.2);
+}
+
+.ts-category-option.selected {
+  background: rgba(78, 205, 196, 0.1);
+  border-color: rgba(78, 205, 196, 0.4);
+}
+
+.ts-cat-name {
+  font-size: 13px;
+  color: #e2e8f0;
+  margin-bottom: 2px;
+}
+
+.ts-cat-desc {
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* ========== Tabs ========== */
+.ts-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.ts-tab {
+  padding: 10px 18px;
+  font-size: 13px;
+  color: #94a3b8;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.ts-tab:hover {
+  color: #e2e8f0;
+}
+
+.ts-tab.active {
+  color: #4ECDC4;
+  border-bottom-color: #4ECDC4;
+}
+
+.ts-tab-content {
+  min-height: 300px;
+}
+
+/* ========== 列表 ========== */
+.ts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ts-list-item {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ts-list-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.ts-list-item.selected {
+  background: rgba(78, 205, 196, 0.05);
+  border-color: rgba(78, 205, 196, 0.3);
+}
+
+.ts-list-check {
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: transparent;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.ts-list-item.selected .ts-list-check {
+  background: linear-gradient(135deg, #4ECDC4, #818CF8);
+  border-color: transparent;
+  color: #fff;
+}
+
+.ts-list-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.ts-list-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #e2e8f0;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ts-list-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.ts-list-desc {
+  font-size: 13px;
+  color: #94a3b8;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.ts-badge {
+  padding: 2px 8px;
+  background: rgba(129, 140, 248, 0.15);
+  border-radius: 4px;
+  font-size: 11px;
+  color: #818CF8;
+}
+
+.ts-badge-small {
+  padding: 2px 6px;
+  background: rgba(78, 205, 196, 0.1);
+  border-radius: 4px;
+  font-size: 11px;
+  color: #4ECDC4;
+}
+
+.ts-tag {
+  display: inline-block;
+  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.ts-tag-small {
+  display: inline-block;
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 4px;
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* ========== 数据卡片 ========== */
+.ts-data-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.ts-data-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.ts-data-full {
+  grid-column: span 1;
+}
+
+.ts-data-label {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.ts-data-value {
+  font-size: 20px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #4ECDC4, #818CF8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ts-data-value-small {
+  font-size: 13px;
+  color: #e2e8f0;
+  line-height: 1.5;
+}
+
+/* ========== 待补充 ========== */
+.ts-pending-box {
+  margin-top: 20px;
+  padding: 16px;
+  background: rgba(251, 191, 36, 0.05);
+  border: 1px solid rgba(251, 191, 36, 0.15);
+  border-radius: 12px;
+}
+
+.ts-pending-box h4 {
+  font-size: 14px;
+  color: #fbbf24;
+  margin-bottom: 10px;
+}
+
+.ts-pending-box ul {
+  list-style: none;
+}
+
+.ts-pending-box li {
+  padding: 4px 0;
+  font-size: 13px;
+  color: #fcd34d;
+  padding-left: 18px;
+  position: relative;
+}
+
+.ts-pending-box li::before {
+  content: '○';
+  position: absolute;
+  left: 0;
+}
+
+/* ========== 研究/参考头部 ========== */
+.ts-research-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  gap: 16px;
+}
+
+.ts-research-header .ts-section-desc {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+/* ========== 案例卡片 ========== */
+.ts-case-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.ts-case-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.ts-case-card:hover {
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-2px);
+}
+
+.ts-case-card.selected {
+  background: rgba(78, 205, 196, 0.06);
+  border-color: rgba(78, 205, 196, 0.4);
+}
+
+.ts-case-card.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, #4ECDC4, #818CF8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: #fff;
+}
+
+.ts-case-score {
+  display: inline-block;
+  padding: 3px 8px;
+  background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(129, 140, 248, 0.2));
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4ECDC4;
+  margin-bottom: 10px;
+}
+
+.ts-case-card h4 {
+  font-size: 14px;
+  font-weight: 500;
+  color: #e2e8f0;
+  margin-bottom: 6px;
+}
+
+.ts-case-reason {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.ts-case-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.ts-empty-small {
+  padding: 40px;
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* ========== 可复用要素 ========== */
+.ts-reusable-box {
+  margin-top: 24px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+}
+
+.ts-reusable-box h4 {
+  font-size: 15px;
+  color: #e2e8f0;
+  margin-bottom: 16px;
+}
+
+.ts-reusable-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.ts-reusable-grid label {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.ts-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ========== 方案生成 ========== */
+.ts-gen-section {
+  margin-bottom: 24px;
+}
+
+.ts-gen-section h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 8px;
+}
+
+.ts-gen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.ts-gen-header h3 {
+  margin-bottom: 0;
+}
+
+/* ========== 大纲 ========== */
+.ts-outline {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.ts-outline-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ts-outline-pages {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: normal;
+}
+
+.ts-outline-section {
+  margin-bottom: 16px;
+}
+
+.ts-outline-section:last-child {
+  margin-bottom: 0;
+}
+
+.ts-outline-chapter {
+  font-size: 14px;
+  font-weight: 500;
+  color: #4ECDC4;
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  background: rgba(78, 205, 196, 0.05);
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ts-outline-pagecount {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: normal;
+}
+
+.ts-outline-pages {
+  list-style: none;
+  padding-left: 12px;
+}
+
+.ts-outline-pages li {
+  padding: 6px 0;
+  font-size: 13px;
+  color: #94a3b8;
+  display: flex;
+  gap: 10px;
+}
+
+.ts-page-num {
+  color: #818CF8;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+/* ========== 质量检查 ========== */
+.ts-quality-score {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.ts-quality-score strong {
+  font-size: 22px;
+  background: linear-gradient(135deg, #4ECDC4, #818CF8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ts-quality-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.ts-quality-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.ts-quality-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #e2e8f0;
+  margin-bottom: 8px;
+}
+
+.ts-quality-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.ts-quality-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4ECDC4, #818CF8);
+  border-radius: 999px;
+  transition: width 1s ease;
+}
+
+.ts-quality-issues {
+  font-size: 12px;
+  color: #fbbf24;
+  line-height: 1.6;
+}
+
+/* ========== 输出配置 ========== */
+.ts-output-section {
+  margin-top: 24px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+}
+
+.ts-output-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 16px;
+}
+
+.ts-output-row {
+  margin-bottom: 20px;
+}
+
+.ts-output-row label {
+  display: block;
+  font-size: 13px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+
+.ts-format-options {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ts-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #e2e8f0;
+}
+
+.ts-checkbox input {
+  width: 16px;
+  height: 16px;
+  accent-color: #4ECDC4;
+}
+
+.ts-template-section {
+  margin-top: 20px;
+}
+
+.ts-template-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.ts-template-header label {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-bottom: 0;
+}
+
+.ts-template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.ts-template-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ts-template-card:hover {
+  transform: translateY(-2px);
+}
+
+.ts-template-card.selected {
+  border-color: rgba(78, 205, 196, 0.5);
+  box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.2);
+}
+
+.ts-template-preview {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ts-template-name {
+  padding: 8px 10px 2px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #e2e8f0;
+  text-align: center;
+}
+
+.ts-template-cat {
+  padding: 0 10px 8px;
+  font-size: 11px;
+  color: #64748b;
+  text-align: center;
+}
+
+/* ========== 成功页 ========== */
+.ts-success-box {
+  text-align: center;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  margin-bottom: 24px;
+}
+
+.ts-success-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.ts-success-box h2 {
+  font-size: 24px;
+  color: #f1f5f9;
+  margin-bottom: 8px;
+}
+
+.ts-success-box p {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.ts-output-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.ts-preview-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 12px;
+}
+
+.ts-preview-iframe {
+  width: 100%;
+  height: 600px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: #fff;
+}
+
+/* ========== 右侧预览面板 ========== */
+.ts-preview-panel {
+  width: 340px;
+  background: #0d0d1a;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.ts-preview-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 14px;
+  font-weight: 500;
+  color: #e2e8f0;
+}
+
+.ts-preview-body {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.ts-preview-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.ts-preview-empty-icon {
+  font-size: 36px;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+.ts-preview-empty p {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 20px;
+}
+
+.ts-progress-steps {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ts-pstep {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  font-size: 12px;
+  color: #64748b;
+  text-align: center;
+}
+
+.ts-pstep.active {
+  background: rgba(78, 205, 196, 0.1);
+  border-color: rgba(78, 205, 196, 0.3);
+  color: #4ECDC4;
+}
+
+.ts-pstep.done {
+  color: #94a3b8;
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.ts-preview-iframe-small {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+}
+
+/* ========== 加载遮罩 ========== */
+.ts-loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(8px);
+}
+
+.ts-loading-box {
+  background: #12121f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 40px;
+  width: 360px;
+  text-align: center;
+}
+
+.ts-loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #4ECDC4;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.ts-loading-text {
+  font-size: 15px;
+  color: #e2e8f0;
+  margin-bottom: 16px;
+}
+
+.ts-loading-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.ts-loading-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4ECDC4, #818CF8);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.ts-loading-percent {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* ========== 空状态 ========== */
+.ts-empty-state {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a14;
+}
+
+.ts-empty-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.ts-empty-state h2 {
+  font-size: 24px;
+  color: #f1f5f9;
+  margin-bottom: 8px;
+}
+
+.ts-empty-state p {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 24px;
+}
+
+/* ========== 快速输入区域 ========== */
+.ts-quick-input-card {
+  background: linear-gradient(135deg, rgba(78, 205, 196, 0.08) 0%, rgba(129, 140, 248, 0.08) 100%);
+  border: 1px dashed rgba(78, 205, 196, 0.4);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.ts-quick-input-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.ts-quick-input-icon {
+  font-size: 20px;
+}
+
+.ts-quick-input-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.ts-quick-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 14px 16px;
+  background: rgba(15, 15, 22, 0.6);
+  border: 1px solid rgba(78, 205, 196, 0.3);
+  border-radius: 8px;
+  color: #f1f5f9;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: vertical;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ts-quick-textarea:focus {
+  outline: none;
+  border-color: #4ECDC4;
+  box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.15);
+}
+
+.ts-quick-textarea::placeholder {
+  color: #475569;
+}
+
+.ts-quick-input-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ts-quick-input-hint {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.ts-quick-input-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.ts-ghost-btn {
+  padding: 8px 18px;
+  background: transparent;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  color: #94a3b8;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ts-ghost-btn:hover:not(:disabled) {
+  border-color: #475569;
+  color: #f1f5f9;
+  background: rgba(51, 65, 85, 0.3);
+}
+
+.ts-ghost-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ts-form-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 8px 0 20px;
+}
+
+.ts-form-divider::before,
+.ts-form-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #1e293b, transparent);
+}
+
+.ts-form-divider span {
+  font-size: 13px;
+  color: #475569;
+  white-space: nowrap;
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 1200px) {
+  .ts-preview-panel {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .ts-sidebar {
+    display: none;
+  }
+
+  .ts-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ts-features-grid,
+  .ts-quality-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ts-reusable-grid,
+  .ts-data-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ts-category-picker {
+    grid-template-columns: 1fr;
+  }
+
+  .ts-main-header {
+    padding: 16px 20px;
+  }
+
+  .ts-content-area {
+    padding: 20px;
+  }
+}

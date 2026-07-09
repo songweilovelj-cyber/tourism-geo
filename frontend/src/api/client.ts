@@ -51,11 +51,11 @@ api.interceptors.response.use(
           }
           return api(originalRequest)
         } catch {
-          // 刷新失败，清除登录状态
+          // 刷新失败，清除登录状态但不跳转（策展助手支持匿名使用）
           localStorage.removeItem('accessToken')
           localStorage.removeItem('refreshToken')
           localStorage.removeItem('provider')
-          window.location.href = '/login'
+          // 不再跳转到login页面，允许以游客身份继续使用
         }
       }
     }

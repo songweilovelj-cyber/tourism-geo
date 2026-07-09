@@ -11,6 +11,7 @@ import categoryRoutes from '@/modules/category/category.routes'  // 分类路由
 import providerRoutes from '@/modules/provider/provider.routes'  // 服务者路由
 import geoRoutes from '@/modules/geo/geo.routes'
 import contentRoutes from '@/modules/content/content.routes'
+import exhibitionRoutes from '@/modules/content/exhibition.routes'
 import platformRoutes from '@/modules/platform/platform.routes'
 import distributionLinkRoutes from '@/modules/distribution-link/distribution.routes'  // 分销链接路由
 import mediaRoutes from '@/modules/media/media.routes'  // 媒体文件路由
@@ -45,6 +46,7 @@ export function createApp(): Express {
   app.use('/api/categories', categoryRoutes)      // 分类
   app.use('/api/geo', geoRoutes)
   app.use('/api/content', contentRoutes)
+  app.use('/api/exhibition', exhibitionRoutes)
   app.use('/api/platforms', platformRoutes)
   app.use('/api/distribution-links', distributionLinkRoutes)  // 分销链接
   app.use('/api/media', mediaRoutes)              // 媒体文件上传管理

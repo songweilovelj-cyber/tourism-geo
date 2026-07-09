@@ -1,0 +1,205 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <radialGradient id="paperGrad" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#fefcf8"/>
+      <stop offset="40%" stop-color="#f9f3e9"/>
+      <stop offset="70%" stop-color="#f0e6d8"/>
+      <stop offset="100%" stop-color="#e8dcc8"/>
+    </radialGradient>
+    <radialGradient id="inkBlot1" cx="30%" cy="20%" r="40%">
+      <stop offset="0%" stop-color="#1a1814" stop-opacity="0.08"/>
+      <stop offset="60%" stop-color="#1a1814" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#1a1814" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="inkBlot2" cx="70%" cy="80%" r="45%">
+      <stop offset="0%" stop-color="#1a1814" stop-opacity="0.1"/>
+      <stop offset="50%" stop-color="#1a1814" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#1a1814" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="mountainBase" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1a1814" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#1a1814" stop-opacity="0.25"/>
+    </linearGradient>
+    <linearGradient id="mountainMid" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1a1814" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#1a1814" stop-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="mountainFront" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1a1814" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#1a1814" stop-opacity="0.55"/>
+    </linearGradient>
+    <filter id="softBlur">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+    <filter id="lightBlur">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
+    <pattern id="ricePaper" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+      <circle cx="30" cy="30" r="28" fill="none" stroke="#b8985a" stroke-width="0.2" opacity="0.06"/>
+      <circle cx="30" cy="30" r="22" fill="none" stroke="#b8985a" stroke-width="0.15" opacity="0.04"/>
+    </pattern>
+    <pattern id="fiber" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="100" y2="100" stroke="#a8884a" stroke-width="0.3" opacity="0.05"/>
+      <line x1="100" y1="0" x2="0" y2="100" stroke="#a8884a" stroke-width="0.3" opacity="0.05"/>
+      <line x1="0" y1="33" x2="100" y2="33" stroke="#a8884a" stroke-width="0.2" opacity="0.04"/>
+      <line x1="0" y1="66" x2="100" y2="66" stroke="#a8884a" stroke-width="0.2" opacity="0.04"/>
+      <line x1="33" y1="0" x2="33" y2="100" stroke="#a8884a" stroke-width="0.2" opacity="0.04"/>
+      <line x1="66" y1="0" x2="66" y2="100" stroke="#a8884a" stroke-width="0.2" opacity="0.04"/>
+    </pattern>
+  </defs>
+  
+  <!-- 宣纸底色 -->
+  <rect width="1920" height="1080" fill="url(#paperGrad)"/>
+  
+  <!-- 宣纸纤维纹理 -->
+  <rect width="1920" height="1080" fill="url(#fiber)"/>
+  
+  <!-- 墨晕效果 -->
+  <ellipse cx="400" cy="150" rx="450" ry="250" fill="url(#inkBlot1)" filter="url(#softBlur)"/>
+  <ellipse cx="1500" cy="900" rx="550" ry="300" fill="url(#inkBlot2)" filter="url(#softBlur)"/>
+  <ellipse cx="1600" cy="180" rx="250" ry="150" fill="#a8884a" opacity="0.06" filter="url(#softBlur)"/>
+  <ellipse cx="150" cy="800" rx="300" ry="180" fill="#a8884a" opacity="0.05" filter="url(#softBlur)"/>
+  
+  <!-- 远山层叠 - 最淡 -->
+  <path d="M 0 700 Q 120 660 240 680 T 480 670 Q 650 640 800 665 T 1200 655 Q 1400 640 1600 660 T 1920 680 L 1920 1080 L 0 1080 Z" fill="url(#mountainBase)" filter="url(#softBlur)"/>
+  
+  <!-- 中山层叠 - 中等 -->
+  <path d="M 0 760 Q 80 720 160 740 Q 240 700 320 725 Q 400 690 480 715 Q 560 685 640 710 Q 720 690 800 715 Q 880 695 960 720 Q 1040 695 1120 720 Q 1200 695 1280 715 Q 1360 690 1440 710 Q 1520 685 1600 705 Q 1680 690 1760 710 Q 1840 695 1920 715 L 1920 1080 L 0 1080 Z" fill="url(#mountainMid)" filter="url(#lightBlur)"/>
+  
+  <!-- 近山层叠 - 最深 -->
+  <path d="M 0 820 Q 60 780 120 800 Q 180 770 240 795 Q 300 765 360 790 Q 420 760 480 785 Q 540 755 600 780 Q 660 760 720 785 Q 780 765 840 790 Q 900 770 960 795 Q 1020 770 1080 795 Q 1140 765 1200 785 Q 1260 760 1320 780 Q 1380 755 1440 775 Q 1500 750 1560 770 Q 1620 755 1680 775 Q 1740 760 1800 780 Q 1860 765 1920 785 L 1920 1080 L 0 1080 Z" fill="url(#mountainFront)" filter="url(#lightBlur)"/>
+  
+  <!-- 孤峰 -->
+  <path d="M 180 730 Q 200 650 220 730 Z" fill="#1a1814" opacity="0.35" filter="url(#lightBlur)"/>
+  <path d="M 350 740 Q 375 670 400 740 Z" fill="#1a1814" opacity="0.3" filter="url(#lightBlur)"/>
+  <path d="M 650 720 Q 680 640 710 720 Z" fill="#1a1814" opacity="0.38" filter="url(#lightBlur)"/>
+  <path d="M 1100 725 Q 1130 650 1160 725 Z" fill="#1a1814" opacity="0.33" filter="url(#lightBlur)"/>
+  <path d="M 1450 715 Q 1480 640 1510 715 Z" fill="#1a1814" opacity="0.36" filter="url(#lightBlur)"/>
+  <path d="M 1750 720 Q 1780 650 1810 720 Z" fill="#1a1814" opacity="0.34" filter="url(#lightBlur)"/>
+  
+  <!-- 远山点缀 -->
+  <path d="M 80 780 Q 90 760 100 780" stroke="#1a1814" stroke-width="1" fill="none" opacity="0.25"/>
+  <path d="M 500 790 Q 510 770 520 790" stroke="#1a1814" stroke-width="1" fill="none" opacity="0.28"/>
+  <path d="M 1300 785 Q 1310 765 1320 785" stroke="#1a1814" stroke-width="1" fill="none" opacity="0.26"/>
+  
+  <!-- 飞鸟群 -->
+  <g opacity="0.35">
+    <path d="M 250 200 Q 260 195 270 200 M 270 200 Q 280 195 290 200" stroke="#1a1814" stroke-width="1.5" fill="none"/>
+    <path d="M 450 150 Q 458 145 465 150 M 465 150 Q 472 145 480 150" stroke="#1a1814" stroke-width="1.2" fill="none"/>
+    <path d="M 700 220 Q 708 215 715 220 M 715 220 Q 722 215 730 220" stroke="#1a1814" stroke-width="1.3" fill="none"/>
+    <path d="M 950 180 Q 958 175 965 180 M 965 180 Q 972 175 980 180" stroke="#1a1814" stroke-width="1.4" fill="none"/>
+    <path d="M 1200 250 Q 1208 245 1215 250 M 1215 250 Q 1222 245 1230 250" stroke="#1a1814" stroke-width="1.3" fill="none"/>
+    <path d="M 1450 200 Q 1458 195 1465 200 M 1465 200 Q 1472 195 1480 200" stroke="#1a1814" stroke-width="1.5" fill="none"/>
+  </g>
+  
+  <!-- 祥云装饰 -->
+  <g opacity="0.15" transform="translate(1400, 120)">
+    <path d="M 0 20 Q 15 10 30 20 Q 45 30 60 20 Q 45 10 30 20" fill="#a8884a"/>
+    <path d="M 20 30 Q 35 20 50 30 Q 65 40 80 30 Q 65 20 50 30" fill="#a8884a"/>
+    <path d="M 40 40 Q 55 30 70 40 Q 85 50 100 40 Q 85 30 70 40" fill="#a8884a"/>
+  </g>
+  
+  <!-- 太阳 -->
+  <g transform="translate(1550, 180)">
+    <circle r="50" fill="#c93939" opacity="0.1"/>
+    <circle r="35" fill="#c93939" opacity="0.15"/>
+    <circle r="20" fill="#c93939" opacity="0.2"/>
+    <circle r="8" fill="#c93939" opacity="0.3"/>
+  </g>
+  
+  <!-- 传统宝塔 -->
+  <g opacity="0.45" transform="translate(80, 580)">
+    <rect x="12" y="70" width="16" height="50" fill="#1a1814"/>
+    <polygon points="8,70 40,70 33,60 17,60" fill="#1a1814"/>
+    <rect x="10" y="50" width="20" height="10" fill="#1a1814"/>
+    <polygon points="6,50 44,50 36,42 14,42" fill="#1a1814"/>
+    <rect x="14" y="35" width="12" height="8" fill="#1a1814"/>
+    <polygon points="10,35 30,35 24,27 16,27" fill="#1a1814"/>
+    <rect x="17" y="22" width="6" height="8" fill="#1a1814"/>
+    <polygon points="13,22 27,22 22,14 18,14" fill="#1a1814"/>
+    <line x1="20" y1="8" x2="20" y2="14" stroke="#1a1814" stroke-width="1.5"/>
+  </g>
+  
+  <!-- 帆船 -->
+  <g opacity="0.4" transform="translate(1650, 680)">
+    <path d="M 0 25 L 35 25 L 30 35 L 5 35 Z" fill="#1a1814"/>
+    <line x1="17" y1="0" x2="17" y2="25" stroke="#1a1814" stroke-width="1.2"/>
+    <path d="M 17 3 L 30 22 L 17 22 Z" fill="#1a1814"/>
+    <path d="M 17 6 L 8 20 L 17 20 Z" fill="#1a1814"/>
+  </g>
+  
+  <!-- 松树 -->
+  <g opacity="0.45" transform="translate(1780, 630)">
+    <rect x="16" y="55" width="3" height="35" fill="#1a1814"/>
+    <ellipse cx="17.5" cy="45" rx="20" ry="15" fill="#1a1814"/>
+    <ellipse cx="17.5" cy="30" rx="15" ry="12" fill="#1a1814"/>
+    <ellipse cx="17.5" cy="18" rx="10" ry="8" fill="#1a1814"/>
+  </g>
+  
+  <!-- 竹子 -->
+  <g opacity="0.35" transform="translate(30, 480)">
+    <line x1="0" y1="0" x2="0" y2="180" stroke="#1a1814" stroke-width="1.8"/>
+    <line x1="0" y1="40" x2="-12" y2="30" stroke="#1a1814" stroke-width="0.8"/>
+    <line x1="0" y1="40" x2="12" y2="30" stroke="#1a1814" stroke-width="0.8"/>
+    <line x1="0" y1="70" x2="-15" y2="58" stroke="#1a1814" stroke-width="0.8"/>
+    <line x1="0" y1="70" x2="15" y2="58" stroke="#1a1814" stroke-width="0.8"/>
+    <line x1="0" y1="105" x2="-16" y2="92" stroke="#1a1814" stroke-width="0.8"/>
+    <line x1="0" y1="105" x2="16" y2="92" stroke="#1a1814" stroke-width="0.8"/>
+    <line x1="0" y1="140" x2="-18" y2="125" stroke="#1a1814" stroke-width="0.8"/>
+    <line x1="0" y1="140" x2="18" y2="125" stroke="#1a1814" stroke-width="0.8"/>
+  </g>
+  
+  <!-- 文房四宝 - 毛笔 -->
+  <g opacity="0.3" transform="translate(50, 850) rotate(-15)">
+    <rect x="0" y="0" width="3" height="120" fill="#1a1814"/>
+    <ellipse cx="1.5" cy="0" rx="3" ry="8" fill="#1a1814"/>
+    <path d="M 1.5 120 Q 0 140 1.5 160 Q 3 140 1.5 120" fill="#8a8478"/>
+    <path d="M 1.5 120 Q -1 145 1.5 170 Q 4 145 1.5 120" fill="#6a6458"/>
+  </g>
+  
+  <!-- 文房四宝 - 砚台 -->
+  <g opacity="0.35" transform="translate(100, 900)">
+    <rect x="0" y="0" width="50" height="35" rx="5" fill="#1a1814"/>
+    <ellipse cx="25" cy="18" rx="20" ry="12" fill="#3a3630"/>
+    <circle cx="25" cy="18" r="8" fill="#2a2820"/>
+  </g>
+  
+  <!-- 文房四宝 - 卷轴 -->
+  <g opacity="0.3" transform="translate(1800, 850) rotate(10)">
+    <rect x="0" y="0" width="10" height="80" fill="#1a1814"/>
+    <rect x="10" y="0" width="60" height="80" fill="#f0e6d8"/>
+    <rect x="70" y="0" width="10" height="80" fill="#1a1814"/>
+    <rect x="5" y="-5" width="80" height="5" fill="#a8884a" opacity="0.6"/>
+    <rect x="5" y="80" width="80" height="5" fill="#a8884a" opacity="0.6"/>
+  </g>
+  
+  <!-- 印章 - 策展 -->
+  <g transform="translate(1830, 960)">
+    <rect x="0" y="0" width="55" height="55" fill="#c93939" opacity="0.8" rx="2"/>
+    <rect x="3" y="3" width="49" height="49" fill="none" stroke="#fdfbf6" stroke-width="1" opacity="0.6"/>
+    <text x="27" y="32" text-anchor="middle" font-family="serif" font-size="18" font-weight="bold" fill="#fdfbf6">策</text>
+    <text x="27" y="52" text-anchor="middle" font-family="serif" font-size="18" font-weight="bold" fill="#fdfbf6">展</text>
+  </g>
+  
+  <!-- 印章 - 博物馆 -->
+  <g opacity="0.6" transform="translate(50, 50)">
+    <rect x="0" y="0" width="40" height="40" fill="#a8884a" rx="2"/>
+    <text x="20" y="26" text-anchor="middle" font-family="serif" font-size="14" font-weight="bold" fill="#1a1814">博</text>
+  </g>
+  
+  <!-- 暗金边框 -->
+  <g opacity="0.4">
+    <line x1="20" y1="20" x2="1900" y2="20" stroke="#a8884a" stroke-width="1"/>
+    <line x1="20" y1="1060" x2="1900" y2="1060" stroke="#a8884a" stroke-width="1"/>
+    <line x1="20" y1="20" x2="20" y2="1060" stroke="#a8884a" stroke-width="1"/>
+    <line x1="1900" y1="20" x2="1900" y2="1060" stroke="#a8884a" stroke-width="1"/>
+  </g>
+  
+  <!-- 四角云纹装饰 -->
+  <g opacity="0.35">
+    <path d="M 25 35 Q 15 30 20 20 Q 25 15 35 20 Q 40 30 30 35" fill="#a8884a"/>
+    <path d="M 1895 35 Q 1905 30 1900 20 Q 1895 15 1885 20 Q 1880 30 1890 35" fill="#a8884a"/>
+    <path d="M 25 1045 Q 15 1040 20 1030 Q 25 1025 35 1030 Q 40 1040 30 1045" fill="#a8884a"/>
+    <path d="M 1895 1045 Q 1905 1040 1900 1030 Q 1895 1025 1885 1030 Q 1880 1040 1890 1045" fill="#a8884a"/>
+  </g>
+</svg>

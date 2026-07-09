@@ -1,19 +1,9 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-import LandingPage from '@/pages/LandingPage/LandingPage'
-import RegisterPage from '@/pages/RegisterPage/RegisterPage'
-import LoginPage from '@/pages/LoginPage/LoginPage'
-import OnboardingPage from '@/pages/OnboardingPage/OnboardingPage'
-import ContentGeneratePage from '@/pages/ContentGeneratePage/ContentGeneratePage'
-import DashboardPage from '@/pages/DashboardPage/DashboardPage'
-import ProviderProfilePage from '@/pages/ProviderProfilePage/ProviderProfilePage'
-import SearchResultsPage from '@/pages/SearchResultsPage/SearchResultsPage'
-import ArticleDetailPage from '@/pages/ArticleDetailPage/ArticleDetailPage'
-import ResourceProfilePage from '@/pages/ResourceProfilePage/ResourceProfilePage'
+import CurationWorkspace from '@/pages/ExhibitionPlanPage/CurationWorkspace'
 
-// 创建 QueryClient 实例
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -26,70 +16,50 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
-          {/* 首页 */}
-          <Route path="/" element={<LandingPage />} />
+          {/* 首页 - 默认跳转到策展助手 */}
+          <Route path="/" element={<Navigate to="/curation" replace />} />
 
-          {/* 认证相关 */}
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/login" element={<LoginPage />} />
-
-          {/* 入驻引导 */}
-          <Route path="/onboarding" element={<OnboardingPage />} />
-
-          {/* 内容生成 */}
-          <Route path="/content/generate" element={<ContentGeneratePage />} />
-
-          {/* 仪表盘 */}
-          <Route path="/dashboard" element={<DashboardPage />} />
-
-          {/* 搜索结果页 */}
-          <Route path="/search" element={<SearchResultsPage />} />
-
-          {/* 服务者公开主页 */}
-          <Route path="/p/:id" element={<ProviderProfilePage />} />
-
-          {/* 文章详情页（落地页） */}
-          <Route path="/p/:providerId/article/:articleId" element={<ArticleDetailPage />} />
-
-          {/* 文旅资源详情页 */}
-          <Route path="/r/:id" element={<ResourceProfilePage />} />
+          {/* 策展助手 - 博物馆策展方案AI辅助生成系统 */}
+          <Route path="/curation" element={<CurationWorkspace />} />
+          <Route path="/curation/:id" element={<CurationWorkspace />} />
 
           {/* 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </QueryClientProvider>
   )
 }
 
-// 占位组件
-function ComingSoon({ title }: { title: string }) {
-  return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="text-center">
-        <div className="text-6xl mb-4">🚧</div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">{title}</h1>
-        <p className="text-gray-500">功能开发中，敬请期待...</p>
-      </div>
-    </div>
-  )
-}
-
-// 404 页面
 function NotFound() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="text-center">
-        <div className="text-8xl mb-4">404</div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">页面不存在</h1>
-        <p className="text-gray-500 mb-6">抱歉，你访问的页面不存在</p>
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(to bottom right, #0a0a14, #1e1b4b)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif'
+    }}>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ fontSize: '80px', marginBottom: '16px', color: '#4ECDC4' }}>404</div>
+        <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#f1f5f9', marginBottom: '8px' }}>页面不存在</h1>
+        <p style={{ color: '#94a3b8', marginBottom: '24px' }}>抱歉，你访问的页面不存在</p>
         <a
-          href="/"
-          className="px-6 py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition-colors font-semibold"
+          href="#/curation"
+          style={{
+            padding: '10px 24px',
+            background: 'linear-gradient(to right, #4ECDC4, #818CF8)',
+            color: '#fff',
+            borderRadius: '8px',
+            fontWeight: 600,
+            textDecoration: 'none',
+            fontSize: '14px'
+          }}
         >
-          返回首页
+          返回策展助手
         </a>
       </div>
     </div>

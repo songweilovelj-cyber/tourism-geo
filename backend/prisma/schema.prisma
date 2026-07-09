@@ -339,3 +339,184 @@ model IndustryAdmin {
 
   @@map("industry_admins")
 }
+
+// ──────────────────────────────────────────────────────────────
+// 策展方案（核心实体）
+// ──────────────────────────────────────────────────────────────
+
+model ExhibitionPlan {
+  id          String   @id @default(uuid())
+  phone       String   // 关联用户手机号
+
+  // 步骤1: 基本信息
+  basicInfo   ExhibitionBasicInfo?
+  
+  // 步骤2: 展览定位
+  positioning ExhibitionPositioning?
+  
+  // 步骤3: 展区规划
+  zones       ExhibitionZone[]
+  
+  // 步骤4: 核心展品配置
+  coreExhibits ExhibitionCoreExhibit[]
+  
+  // 步骤5: 辅助展品清单
+  auxiliaryExhibits ExhibitionAuxiliaryExhibit[]
+  
+  // 步骤6: 展陈设计
+  displayDesign ExhibitionDisplayDesign?
+  
+  // 步骤7: 教育推广
+  educationPlan ExhibitionEducation?
+  
+  // 生成的方案内容
+  generatedContent String?  // JSON格式的完整策展方案
+  
+  status      String @default("DRAFT") // DRAFT, GENERATING, COMPLETED, FAILED
+  version     Int @default(1)
+  parentId    String?  // 用于版本控制，指向父版本ID
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  generatedAt DateTime?
+  
+  parent      ExhibitionPlan? @relation("ExhibitionPlanVersions", fields: [parentId], references: [id])
+  versions    ExhibitionPlan[] @relation("ExhibitionPlanVersions")
+
+  @@map("exhibition_plans")
+}
+
+// 展览基本信息
+model ExhibitionBasicInfo {
+  id            String @id @default(uuid())
+  planId        String @unique
+  plan          ExhibitionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  
+  theme         String  // 展览主题，如"水利文明"、"丝绸之路"
+  name          String  // 展览名称
+  organizer     String? // 主办单位
+  venue         String? // 展览地点
+  startDate     String? // 开始时间
+  endDate       String? // 结束时间
+  area          Int?    // 预计面积（平方米）
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("exhibition_basic_info")
+}
+
+// 展览定位
+model ExhibitionPositioning {
+  id            String @id @default(uuid())
+  planId        String @unique
+  plan          ExhibitionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  
+  planType      String  // 常设展 / 临时展 / 专题展
+  targetAudience String // 普通观众 / 专业观众 / 青少年 / 亲子家庭
+  targetAudienceOther String? // 其他目标受众描述
+  educationGoal String? // 教育目的描述
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("exhibition_positioning")
+}
+
+// 展区规划
+model ExhibitionZone {
+  id            String @id @default(uuid())
+  planId        String
+  plan          ExhibitionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  
+  zoneNumber    Int    // 展区序号
+  name          String // 展区名称
+  subtitle      String? // 展区副标题
+  timePeriod    String? // 对应时代/时期
+  narrative     String? // 核心叙事
+  exhibitCount  Int @default(0) // 展品数量
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("exhibition_zones")
+}
+
+// 核心展品（灵魂展品）
+model ExhibitionCoreExhibit {
+  id            String @id @default(uuid())
+  planId        String
+  plan          ExhibitionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  zoneId        String? // 所属展区ID
+  
+  exhibitName   String // 展品名称
+  era           String? // 时代
+  origin        String? // 出土地/来源
+  material      String? // 材质
+  artifactLevel String? // 文物等级：一级/二级/三级
+  description   String? // 展品描述
+  significance  String? // 重要性说明（为什么是灵魂展品）
+  displayMethod String? // 展示方式建议
+  positionDesign String? // 位置设计建议
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("exhibition_core_exhibits")
+}
+
+// 辅助展品
+model ExhibitionAuxiliaryExhibit {
+  id            String @id @default(uuid())
+  planId        String
+  plan          ExhibitionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  zoneId        String? // 所属展区ID
+  
+  exhibitName   String // 展品名称
+  era           String? // 时代
+  origin        String? // 出土地/来源
+  material      String? // 材质
+  artifactLevel String? // 文物等级
+  description   String? // 展品描述
+  isReplica     Boolean @default(false) // 是否为复制品
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("exhibition_auxiliary_exhibits")
+}
+
+// 展陈设计
+model ExhibitionDisplayDesign {
+  id            String @id @default(uuid())
+  planId        String @unique
+  plan          ExhibitionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  
+  totalArea     Int?    // 总面积（平方米）
+  layoutType    String? // 线性布局 / 环形布局 / 混合布局
+  trafficDesign String? // 动线设计描述
+  lightingDesign String? // 灯光设计描述
+  multimediaConfig String? // 多媒体配置
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("exhibition_display_design")
+}
+
+// 教育推广计划
+model ExhibitionEducation {
+  id            String @id @default(uuid())
+  planId        String @unique
+  plan          ExhibitionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  
+  activities    String? // 配套活动（如讲解、工作坊）
+  educationPrograms String? // 社教项目
+  publicityPlan  String? // 宣传方案
+  publications   String? // 出版物
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("exhibition_education")
+}

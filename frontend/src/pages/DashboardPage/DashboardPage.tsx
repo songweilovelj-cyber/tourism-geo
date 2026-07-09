@@ -72,7 +72,7 @@ function DashboardPage() {
   const navigate = useNavigate()
   const { provider, setProvider } = authStore()
   
-  const [activeTab, setActiveTab] = useState<'overview' | 'resource' | 'media' | 'content' | 'distribution'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'resource' | 'media' | 'content' | 'distribution' | 'exhibition'>('overview')
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [articles, setArticles] = useState<Article[]>([])
@@ -438,7 +438,8 @@ function DashboardPage() {
               { key: 'resource', label: '基本信息', icon: '📍' },
               { key: 'media', label: '图片视频', icon: '📷' },
               { key: 'content', label: '内容管理', icon: '📝' },
-              { key: 'distribution', label: '分销链接', icon: '🔗' }
+              { key: 'distribution', label: '分销链接', icon: '🔗' },
+              { key: 'exhibition', label: '策展方案', icon: '🏛️' }
             ].map(tab => (
               <button
                 key={tab.key}
@@ -523,6 +524,13 @@ function DashboardPage() {
                 >
                   <div className="text-2xl mb-2">✨</div>
                   <div className="text-sm font-medium text-gray-700">AI 文案</div>
+                </button>
+                <button
+                  onClick={() => navigate('/exhibition')}
+                  className="p-4 border border-gray-200 rounded-xl hover:border-green-300 hover:bg-green-50 transition-colors text-center"
+                >
+                  <div className="text-2xl mb-2">🏛️</div>
+                  <div className="text-sm font-medium text-gray-700">策展方案</div>
                 </button>
                 <button
                   onClick={() => setActiveTab('distribution')}
@@ -885,6 +893,39 @@ function DashboardPage() {
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {/* 策展方案 */}
+        {activeTab === 'exhibition' && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">策展方案</h2>
+                <p className="text-sm text-gray-500 mt-1">通过AI辅助生成专业的博物馆策展方案</p>
+              </div>
+              <button
+                onClick={() => navigate('/exhibition/new')}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"
+              >
+                新建方案
+              </button>
+            </div>
+            
+            <div className="bg-white rounded-xl p-12 shadow-sm border border-gray-100 text-center">
+              <div className="text-6xl mb-4">🏛️</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">博物馆策展方案生成器</h3>
+              <p className="text-gray-500 mb-6 max-w-md mx-auto">
+                通过步骤式输入，让AI理解你的策展需求，生成专业的博物馆策展方案。
+                支持灵魂展品配置、展区规划、展陈设计等完整功能。
+              </p>
+              <button
+                onClick={() => navigate('/exhibition')}
+                className="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 font-medium"
+              >
+                查看我的方案
+              </button>
+            </div>
           </div>
         )}
       </div>
